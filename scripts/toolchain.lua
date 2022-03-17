@@ -718,7 +718,7 @@ function toolchain(_buildDir, _subDir)
 		if LIBRETRO_OS~=nil then
 			-- most things are "linux" (ish).
 			local targetos = "linux"
-			if LIBRETRO_OS=="osx" then
+			if LIBRETRO_OS=="osx" or LIBRETRO_OS=="osx-arm64" then
 				targetos = "macosx"
 			elseif LIBRETRO_OS:sub(1, 4)=="armv" then
 				targetos = "android"

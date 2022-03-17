@@ -1098,6 +1098,10 @@ ifeq (tvos-arm64,$(LIBRETRO_OS))
 APPLE_EXTRA_FLAGS += --NOASM=1 --DONT_USE_NETWORK=1  --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --LIBRETRO_TVOS=1
 endif
 
+ifeq (osx-arm64,$(LIBRETRO_OS))
+APPLE_EXTRA_FLAGS += --LIBRETRO_OSX_ARM64=1
+endif
+
 .PHONY: all clean regenie generate FORCE
 all: $(GENIE) $(TARGETOS)$(ARCHITECTURE)
 regenie:

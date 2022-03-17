@@ -52,7 +52,7 @@ ifeq ($(config),release)
   INCLUDES           += -I"../../src/host/lua-5.3.0/src"
   INCLUDES           +=
 
-  ifeq ($(LIBRETRO_OS),$(filter $(LIBRETRO_OS),tvos-arm64 ios-arm64))
+  ifeq ($(LIBRETRO_OS),$(filter $(LIBRETRO_OS),tvos-arm64 ios-arm64 osx-arm64))
     $(info Detected iOS, using the host (macOS) clang compiler to build genie. If you're compiling for iOS, we assume you're using macOS to do that.)
 	MAKE_CC = cc
   endif
