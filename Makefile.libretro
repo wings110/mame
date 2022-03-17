@@ -155,6 +155,21 @@ endif
 
 ifeq ($(platform),osx)
   PLATFLAGS += DONT_USE_NETWORK=1
+
+   ifeq ($(CROSS_COMPILE),1)
+		LIBRETRO_CPU = arm64
+		LIBRETRO_OS = osx-arm64
+		ARCH = arm64
+		TARGET_RULE   = -arch $(ARCH) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+		CC = clang $(TARGET_RULE)
+		CXX = clang++ $(TARGET_RULE)
+		PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
+		CFLAGS   += $(TARGET_RULE)
+		CPPFLAGS += $(TARGET_RULE)
+		CXXFLAGS += $(TARGET_RULE)
+		LDFLAGS  += $(TARGET_RULE)
+   endif
+
 endif
 
 ifeq ($(platform),ios-arm64)
