@@ -158,7 +158,7 @@ libretro-build-osx-arm64:
     MACOSX_DEPLOYMENT_TARGET: "10.14"
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-osx-x64"
+    key: "$CI_COMMIT_REF_SLUG-osx-arm64"
   only:
     - master
     - /^libretro/mame.*$/
