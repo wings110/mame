@@ -343,7 +343,10 @@ static void Set_Default_Option(void)
       Add_Option("-nocheat");
 
    if(mouse_enable)
+   {
       Add_Option("-mouse");
+	  Add_Option("-multimouse");
+   }
    else
       Add_Option("-nomouse");
 
@@ -702,6 +705,8 @@ if (log_cb)log_cb(RETRO_LOG_INFO,"ARGUV[0]=%s\n",ARGUV[0]);
    Set_Default_Option();
 
    Add_Option("-mouse");
+	
+   Add_Option("-multimouse");
 
    Set_Path_Option();
 

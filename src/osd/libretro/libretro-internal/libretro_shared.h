@@ -84,12 +84,12 @@ extern char mame_4way_map[256];
 extern bool res_43;
 extern bool video_changed;
 
-extern int mouseLX;
-extern int mouseLY;
+extern int mouseLX[4];
+extern int mouseLY[4];
 extern int mouseBUT[4];
 
-extern int lightgunX;
-extern int lightgunY;
+extern int lightgunX[4];
+extern int lightgunY[4];
 extern int lightgunBUT[4];
 
 extern unsigned short retrokbd_state[RETROK_LAST];

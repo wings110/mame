@@ -25,13 +25,13 @@
 static bool libretro_supports_bitmasks = false;
 uint16_t retrokbd_state[RETROK_LAST];
 uint16_t retrokbd_state2[RETROK_LAST];
-int mouseLX;
-int mouseLY;
-int mouseBUT[4];
+int mouseLX[4];
+int mouseLY[4];
 Joystate joystate[6];
+Mousestate mousestate[4];
+Lightgunstate lightgunstate[4];
 
-int lightgunX, lightgunY;
-int lightgunBUT[4];
+int lightgunX[4], lightgunY[4];
 
 #ifndef RETROK_TILDE
 #define RETROK_TILDE 178
@@ -624,129 +624,174 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
 
 void retro_osd_interface::process_mouse_state(running_machine &machine)
 {
-   static int mbL = 0, mbR = 0;
-   int mouse_l;
-   int mouse_r;
-   int16_t mouse_x;
-   int16_t mouse_y;
-   //printf("mouseneable=%d\n",mouse_enable);
-   if (!mouse_enable)
-      return;
+   unsigned i;
+   for(i = 0;i < 4; i++)
+   {
+         static int mbL[4] = {0}, mbR[4] = {0}, mbM[4] = {0};
+         int mouse_l[4];
+         int mouse_r[4];
+	     int mouse_m[4];
+         int16_t mouse_x[4];
+         int16_t mouse_y[4];
+         //printf("mouseneable=%d\n",mouse_enable);
+         if (!mouse_enable)
+            return;
 
-   mouse_x = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
-   mouse_y = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
-   mouse_l = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT);
-   mouse_r = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_RIGHT);
-   mouseLX = mouse_x*INPUT_RELATIVE_PER_PIXEL;
-   mouseLY = mouse_y*INPUT_RELATIVE_PER_PIXEL;
+         mouse_x[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
+         mouse_y[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
+         mouse_l[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT);
+         mouse_r[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_RIGHT);
+         mouse_m[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_MIDDLE);
+         mouseLX[i] = mouse_x[i]*INPUT_RELATIVE_PER_PIXEL;
+         mouseLY[i] = mouse_y[i]*INPUT_RELATIVE_PER_PIXEL;
 
-static int vmx=fb_width/2,vmy=fb_height/2;
-static int ovmx=fb_width/2,ovmy=fb_height/2;
+         static int vmx[4], vmy[4], ovmx[4], ovmy[4];
+		 vmx[i]=fb_width/2;
+		 vmy[i]=fb_height/2;
+		 ovmx[i]=fb_width/2;
+	     ovmy[i]=fb_height/2;
 
-vmx+=mouse_x;
-vmy+=mouse_y;
-if(vmx>fb_width)vmx=fb_width-1;
-if(vmy>fb_height)vmy=fb_height-1;
-if(vmx<0)vmx=0;
-if(vmy<0)vmy=0;
-if(vmx!=ovmx || vmy!=ovmy){
-	int cx = -1, cy = -1;
-	auto window = osd_common_t::s_window_list.front();
+         vmx[i]+=mouse_x[i];
+         vmy[i]+=mouse_y[i];
+         if(vmx[i]>fb_width)vmx[i]=fb_width-1;
+         if(vmy[i]>fb_height)vmy[i]=fb_height-1;
+         if(vmx[i]<0)vmx[i]=0;
+         if(vmy[i]<0)vmy[i]=0;
+         if(vmx[i]!=ovmx[i] || vmy[i]!=ovmy[i]){
+	        int cx = -1, cy = -1;
+	        auto window = osd_common_t::s_window_list.front();
 
-	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
+	        if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
 					machine.ui_input().push_mouse_move_event(window->target(), cx, cy);
-}
-ovmx=vmx;
-ovmy=vmy;
+      }
+      ovmx[i]=vmx[i];
+      ovmy[i]=vmy[i];
 
-   if(mbL==0 && mouse_l)
-   {
-      mbL=1;
-      mouseBUT[0]=0x80;
+         if(mbL[i]==0 && mouse_l[i])
+         {
+            mbL[i]=1;
+            mousestate[i].mouseBUT[0]=0x80;
 
-	int cx = -1, cy = -1;
-	auto window = osd_common_t::s_window_list.front();
-	//FIXME doubleclick
-	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-		machine.ui_input().push_mouse_down_event(window->target(), cx, cy);
+	      int cx = -1, cy = -1;
+	      auto window = osd_common_t::s_window_list.front();
+	      //FIXME doubleclick
+	      if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
+		      machine.ui_input().push_mouse_down_event(window->target(), cx, cy);
 
 
+         }
+         else if(mbL[i]==1 && !mouse_l[i])
+         {
+            mousestate[i].mouseBUT[0]=0;
+            mbL[i]=0;
+
+	      int cx = -1, cy = -1;
+	      auto window = osd_common_t::s_window_list.front();
+	      if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
+		      machine.ui_input().push_mouse_up_event(window->target(), cx, cy);
+
+         }
+
+         if(mbR[i]==0 && mouse_r[i])
+         {
+            mbR[i]=1;
+            mousestate[i].mouseBUT[1]=0x80;
+
+	      int cx = -1, cy = -1;
+	      auto window = osd_common_t::s_window_list.front();
+
+	      if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
+		      machine.ui_input().push_mouse_rdown_event(window->target(), cx, cy);
+
+
+         }
+         else if(mbR[i]==1 && !mouse_r[i])
+         {
+            mousestate[i].mouseBUT[1]=0;
+            mbR[i]=0;
+
+	      int cx = -1, cy = -1;
+	      auto window = osd_common_t::s_window_list.front();
+	      if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
+		      machine.ui_input().push_mouse_rup_event(window->target(), cx, cy);
+
+         }
+	   
+         if(mbM[i]==0 && mouse_m[i])
+         {
+            mbM[i]=1;
+            mousestate[i].mouseBUT[2]=0x80;
+			 
+	      int cx = -1, cy = -1;
+	      auto window = osd_common_t::s_window_list.front();
+
+	      if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
+		      machine.ui_input().push_mouse_rdown_event(window->target(), cx, cy);
+
+
+         }
+         else if(mbM[i]==1 && !mouse_m[i])
+         {
+            mousestate[i].mouseBUT[2]=0;
+            mbM[i]=0;
+			 
+	      int cx = -1, cy = -1;
+	      auto window = osd_common_t::s_window_list.front();
+	      if (window != nullptr && window->renderer().xy_to_render_target(vmx[i], vmy[i], &cx, &cy))
+		      machine.ui_input().push_mouse_rup_event(window->target(), cx, cy);
+
+         }
    }
-   else if(mbL==1 && !mouse_l)
-   {
-      mouseBUT[0]=0;
-      mbL=0;
-
-	int cx = -1, cy = -1;
-	auto window = osd_common_t::s_window_list.front();
-	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-		machine.ui_input().push_mouse_up_event(window->target(), cx, cy);
-
-   }
-
-   if(mbR==0 && mouse_r)
-   {
-      mbR=1;
-      mouseBUT[1]=1;
-
-	int cx = -1, cy = -1;
-	auto window = osd_common_t::s_window_list.front();
-
-	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-		machine.ui_input().push_mouse_rdown_event(window->target(), cx, cy);
-
-
-   }
-   else if(mbR==1 && !mouse_r)
-   {
-      mouseBUT[1]=0;
-      mbR=0;
-
-	int cx = -1, cy = -1;
-	auto window = osd_common_t::s_window_list.front();
-	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-		machine.ui_input().push_mouse_rup_event(window->target(), cx, cy);
-
-   }
-
-	//printf("vm(%d,%d) mc(%d,%d) mr(%d,%d)\n",vmx,vmy,mouse_x,mouse_y,mouseLX,mouseLY);
+	      //printf("vm(%d,%d) mc(%d,%d) mr(%d,%d)\n",vmx[i],vmy[i],mouse_x[i],mouse_y[i],mouseLX[i],mouseLY[i]);
 }
 
 void retro_osd_interface::process_lightgun_state(running_machine &machine)
 {
-   int16_t gun_x_raw, gun_y_raw;
+   unsigned i,j;
+   for(j = 0;j < 4; j++)
+   {
+      int16_t gun_x_raw[4], gun_y_raw[4];
 
-   if ( lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_DISABLED ) {
-      return;
-   }
-
-   for (int i = 0; i < 4; i++) {
-      lightgunBUT[i] = 0;
-   }
-
-   if ( lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_POINTER ) {
-      gun_x_raw = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
-      gun_y_raw = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
-
-      // handle pointer presses
-      // use multi-touch to support different button inputs
-      int touch_count = input_state_cb( 0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_COUNT );
-      if ( touch_count > 0 && touch_count <= 4 ) {
-         lightgunBUT[touch_count-1] = 0x80;
+      if ( lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_DISABLED ) {
+         return;
       }
-   } else { // lightgun is default when enabled
-      gun_x_raw = input_state_cb( 0, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_X );
-      gun_y_raw = input_state_cb( 0, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_Y );
 
-      if ( input_state_cb( 0, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_TRIGGER ) ) {
-         lightgunBUT[0] = 0x80;
+      for (i = 0; i < 4; i++) {
+         lightgunstate[j].lightgunBUT[i] = 0;
       }
-      if ( input_state_cb( 0, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_A ) ) {
-         lightgunBUT[1] = 0x80;
+
+      if ( lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_POINTER ) {
+         gun_x_raw[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
+         gun_y_raw[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
+
+         // handle pointer presses
+         // use multi-touch to support different button inputs
+         int touch_count[4];
+		 touch_count[i] = input_state_cb( i, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_COUNT );
+         if ( touch_count[i] > 0 && touch_count[i] <= 4 ) {
+            lightgunstate[j].lightgunBUT[touch_count[i]-1] = 0x80;
+         }
+      } else { // lightgun is default when enabled
+         gun_x_raw[j] = input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_X );
+         gun_y_raw[j] = input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_Y );
+
+         if ( input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_TRIGGER ) || input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) ) {
+            lightgunstate[j].lightgunBUT[0] = 0x80;
+         }
+         if ( input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_A ) ) {
+            lightgunstate[j].lightgunBUT[1] = 0x80;
+         }
       }
+      lightgunX[j] = gun_x_raw[j] * 2;
+      lightgunY[j] = gun_y_raw[j] * 2;
+	   
+      //Place the cursor at screen top left when detected as offscreen or when Gun Reload input activated
+      if (input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN ) || input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) )
+	  {
+	     lightgunX[j] = -65534;
+	     lightgunY[j] = -65534; 
+	  }
    }
-   lightgunX = gun_x_raw * 2;
-   lightgunY = gun_y_raw * 2;
 }
 
 //============================================================
@@ -848,11 +893,15 @@ public:
 
 	void reset() override
 	{
-		mouseLX=fb_width/2;
-		mouseLY=fb_height/2;
+	    int j;
+		for(j = 0; j < 4; j++)
+		{
+		   mouseLX[j]=fb_width/2;
+		   mouseLY[j]=fb_height/2;
 
-		int i;
-   		for(i = 0; i < 4; i++)mouseBUT[i]=0;
+		   int i;
+   		   for(i = 0; i < 4; i++)mousestate[j].mouseBUT[i]=0;
+		}
 	}
 
 protected:
@@ -880,32 +929,39 @@ public:
 	{
 		if (!input_enabled() || !mouse_enabled())
 			return;
-
-		auto &devinfo = devicelist()->create_device<retro_mouse_device>(machine, "Retro mouse 1", "Retro mouse 1", *this);
-
-		mouseLX=fb_width/2;
-		mouseLY=fb_height/2;
-
-		devinfo.device()->add_item(
-				"X",
-				static_cast<input_item_id>(ITEM_ID_XAXIS),
-				generic_axis_get_state<std::int32_t>,
-				&mouseLX);
-		devinfo.device()->add_item(
-				"Y",
-				static_cast<input_item_id>(ITEM_ID_YAXIS),
-				generic_axis_get_state<std::int32_t>,
-				&mouseLY);
-
-		int button;
-		for (button = 0; button < 4; button++)
+        int i;
+		char defname[32];
+		
+		for(i = 0; i < 4; i++)
 		{
-			mouseBUT[button]=0;
-			devinfo.device()->add_item(
-				default_button_name(button),
-				static_cast<input_item_id>(ITEM_ID_BUTTON1 + button),
-				generic_button_get_state<std::int32_t>,
-				&mouseBUT[button]);
+		   sprintf(defname, "Retro mouse%d", i);
+		   
+		   auto &devinfo = devicelist()->create_device<retro_mouse_device>(machine, defname, defname, *this);
+
+		   mouseLX[i]=fb_width/2;
+		   mouseLY[i]=fb_height/2;
+
+		   devinfo.device()->add_item(
+				   "X",
+				   static_cast<input_item_id>(ITEM_ID_XAXIS),
+				   generic_axis_get_state<std::int32_t>,
+				   &mouseLX[i]);
+		   devinfo.device()->add_item(
+				   "Y",
+				   static_cast<input_item_id>(ITEM_ID_YAXIS),
+				   generic_axis_get_state<std::int32_t>,
+				   &mouseLY[i]);
+
+		   int button;
+		   for (button = 0; button < 4; button++)
+		   {
+			   mousestate[i].mouseBUT[button]=0;
+			   devinfo.device()->add_item(
+				   default_button_name(button),
+				   static_cast<input_item_id>(ITEM_ID_BUTTON1 + button),
+				   generic_button_get_state<std::int32_t>,
+				   &mousestate[i].mouseBUT[button]);
+		   }
 		}
 
 		m_global_inputs_enabled = true;
@@ -1085,10 +1141,14 @@ public:
 
 	void reset() override
 	{
-		lightgunX=fb_width/2;
-		lightgunY=fb_height/2;
-  		int i;
- 		for(i = 0; i < 4; i++)lightgunBUT[i]=0;
+	int j;
+	for(j = 0; j < 4; j++)
+	   {
+		   lightgunX[j]=fb_width/2;
+		   lightgunY[j]=fb_height/2;
+  		   int i;
+ 		   for(i = 0; i < 4; i++)lightgunstate[j].lightgunBUT[i]=0;
+	   }
 	}
 
 protected:
@@ -1116,31 +1176,39 @@ public:
 	{
 		if (!input_enabled() || !lightgun_enabled())
 			return;
-
-		auto &devinfo = devicelist()->create_device<retro_lightgun_device>(machine, "Retro lightgun 1", "Retro lightgun 1", *this);
-
-		lightgunX=fb_width/2;
-		lightgunY=fb_height/2;
-		devinfo.device()->add_item(
-				"X",
-				static_cast<input_item_id>(ITEM_ID_XAXIS),
-				generic_axis_get_state<std::int32_t>,
-				&lightgunX);
-		devinfo.device()->add_item(
-				"Y",
-				static_cast<input_item_id>(ITEM_ID_YAXIS),
-				generic_axis_get_state<std::int32_t>,
-				&lightgunY);
-
-		int button;
-		for (button = 0; button < 4; button++)
+			
+        int i;
+ 		char defname[32];
+		
+		for(i = 0; i < 4; i++)
 		{
-			lightgunBUT[button]=0;
-			devinfo.device()->add_item(
-				default_button_name(button),
-				static_cast<input_item_id>(ITEM_ID_BUTTON1 + button),
-				generic_button_get_state<std::int32_t>,
-				&lightgunBUT[button]);
+		   sprintf(defname, "Retro lightgun%d", i);
+
+		   auto &devinfo = devicelist()->create_device<retro_lightgun_device>(machine, defname, defname, *this);
+
+		   lightgunX[i]=fb_width/2;
+		   lightgunY[i]=fb_height/2;
+		   devinfo.device()->add_item(
+				   "X",
+				   static_cast<input_item_id>(ITEM_ID_XAXIS),
+				   generic_axis_get_state<std::int32_t>,
+				   &lightgunX[i]);
+		   devinfo.device()->add_item(
+				   "Y",
+				   static_cast<input_item_id>(ITEM_ID_YAXIS),
+				   generic_axis_get_state<std::int32_t>,
+				   &lightgunY[i]);
+
+		   int button;
+		   for (button = 0; button < 4; button++)
+		   {
+			   lightgunstate[i].lightgunBUT[button]=0;
+			   devinfo.device()->add_item(
+				   default_button_name(button),
+				   static_cast<input_item_id>(ITEM_ID_BUTTON1 + button),
+				   generic_button_get_state<std::int32_t>,
+				   &lightgunstate[i].lightgunBUT[button]);
+		   }
 		}
 
 		m_global_inputs_enabled = true;

@@ -22,6 +22,16 @@ typedef struct joystate_t
    int a3[2];
 }Joystate;
 
+typedef struct mousestate_t
+{
+   int mouseBUT[4];
+}Mousestate;
+
+typedef struct lightgunstate_t
+{
+   int lightgunBUT[4];
+}Lightgunstate;
+
 struct KeyPressEventArgs
 {
 	int event_id;
@@ -40,13 +50,11 @@ extern uint16_t retrokbd_state[RETROK_LAST];
 extern uint16_t retrokbd_state2[RETROK_LAST];
 extern kt_table ktable[];
 
-extern int mouseLX;
-extern int mouseLY;
-extern int mouseBUT[4];
+extern int mouseLX[4];
+extern int mouseLY[4];
 
-extern int lightgunX;
-extern int lightgunY;
-extern int lightgunBUT[4];
+extern int lightgunX[4];
+extern int lightgunY[4];
 
 extern Joystate joystate[6];
 
