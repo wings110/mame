@@ -50,13 +50,13 @@ extern uint16_t retrokbd_state[RETROK_LAST];
 extern uint16_t retrokbd_state2[RETROK_LAST];
 extern kt_table ktable[];
 
-extern int mouseLX[4];
-extern int mouseLY[4];
+extern int mouseLX[8];
+extern int mouseLY[8];
 
-extern int lightgunX[4];
-extern int lightgunY[4];
+extern int lightgunX[8];
+extern int lightgunY[8];
 
-extern Joystate joystate[6];
+extern Joystate joystate[8];
 
 extern int fb_width;
 extern int fb_height;

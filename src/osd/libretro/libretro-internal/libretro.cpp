@@ -508,6 +508,10 @@ video_changed=true;
       input_descriptor_macro(4)
   
       input_descriptor_macro(5)
+		  
+      input_descriptor_macro(6)
+  
+      input_descriptor_macro(7)
 
       { 0 },
    };
