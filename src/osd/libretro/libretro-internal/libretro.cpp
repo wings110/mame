@@ -476,7 +476,7 @@ video_changed=true;
       if (!strcmp(var.value, "strict"))
          sprintf(mame_4way_map, "%s", "ss8.sss8.4sss8.44s5.4445");
       if (!strcmp(var.value, "qbert"))
-         sprintf(mame_4way_map, "%s", "4444s8888.444408888.444458888.444555888.ss5.222555666.222256666.222206666.222206666");
+         sprintf(mame_4way_map, "%s", "4444s8888.4444s8888.444458888.444555888.ss5.222555666.222256666.2222s6666.2222s6666");
    }
 	
 #define input_descriptor_macro(c)       { c, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT,  "Joy Left" },\
