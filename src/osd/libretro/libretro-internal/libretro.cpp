@@ -41,6 +41,7 @@ char RPATH[512];
 
 static char option_mouse[50];
 static char option_lightgun[50];
+static char option_lightgun_offscreen[50];
 static char option_cheats[50];
 static char option_overclock[50];
 static char option_renderer[50];
@@ -143,6 +144,7 @@ void retro_set_environment(retro_environment_t cb)
 {
    sprintf(option_mouse, "%s_%s", core, "mouse_enable");
    sprintf(option_lightgun, "%s_%s", core, "lightgun_mode");
+   sprintf(option_lightgun_offscreen, "%s_%s", core, "lightgun_offscreen_mode");
    sprintf(option_cheats, "%s_%s", core, "cheats_enable");
    sprintf(option_overclock, "%s_%s", core, "cpu_overclock");
    sprintf(option_renderer,"%s_%s",core,"alternate_renderer");
@@ -170,6 +172,7 @@ void retro_set_environment(retro_environment_t cb)
     { option_auto_save, "Auto save/load states; disabled|enabled" },
     { option_mouse, "Enable in-game mouse; disabled|enabled" },
     { option_lightgun, "Lightgun mode; none|touchscreen|lightgun" },
+    { option_lightgun_offscreen, "Lightgun offscreen position; free|fixed (top left)|fixed (bottom right)" },
     { option_buttons_profiles, "Profile Buttons according to games (Restart); enabled|disabled" },
     { option_throttle, "Enable throttle; disabled|enabled" },
     { option_cheats, "Enable cheats; disabled|enabled" },
@@ -249,6 +252,19 @@ static void check_variables(void)
          lightgun_mode = RETRO_SETTING_LIGHTGUN_MODE_LIGHTGUN;
       else
          lightgun_mode = RETRO_SETTING_LIGHTGUN_MODE_DISABLED;
+   }
+
+   var.key   = option_lightgun_offscreen;
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "free"))
+         lightgun_offscreen_mode = 0;
+      else if (!strcmp(var.value, "fixed (top left)"))
+         lightgun_offscreen_mode = 1;
+	  else
+         lightgun_offscreen_mode = 2;
    }
 
    var.key   = option_buttons_profiles;

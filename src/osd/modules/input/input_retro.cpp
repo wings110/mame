@@ -773,11 +773,36 @@ void retro_osd_interface::process_lightgun_state(running_machine &machine)
       lightgunX[j] = gun_x_raw[j] * 2;
       lightgunY[j] = gun_y_raw[j] * 2;
 	   
-      //Place the cursor at screen top left when detected as offscreen or when Gun Reload input activated
-      if (input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN ) || input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) )
+      //Place the cursor at a corner of the screen designated by "Lightgun offscreen position" when the cursor touches a min/max value
+      if (input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN ))
 	  {
-	     lightgunX[j] = -65534;
-	     lightgunY[j] = -65534; 
+		 if (lightgun_offscreen_mode == 1)
+		 {
+		    lightgunX[j] = -65535;
+	        lightgunY[j] = -65535;
+		 }
+		 else if (lightgun_offscreen_mode == 2)
+		 {
+		    lightgunX[j] = 65535;
+	        lightgunY[j] = 65535;
+		 }
+	  }
+
+      //The LIGHTGUN_RELOAD input will fire a shot at the bottom-right corner if "Lightgun offscreen position" is set to "fixed (bottom right)"
+	  //That same input will fire a shot at the top-left corner otherwise
+	  //The reload feature of some games fails at the top-left corner
+      if (input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) )
+	  {
+		 if (lightgun_offscreen_mode == 2)
+		 {
+		    lightgunX[j] = 65535;
+	        lightgunY[j] = 65535;
+		 }
+		 else
+		 {
+		    lightgunX[j] = -65535;
+	        lightgunY[j] = -65535;
+		 }
 	  }
    }
 }
