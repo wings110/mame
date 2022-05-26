@@ -536,7 +536,7 @@ void retro_osd_interface::release_keys()
 {
 	auto keybd = dynamic_cast<input_module_base*>(m_keyboard_input);
 	if (keybd != nullptr)
-		keybd->devicelist()->reset_devices();
+		keybd->devicelist().reset_devices();
 }
 
 void retro_osd_interface::process_keyboard_state(running_machine &machine)
@@ -828,7 +828,7 @@ public:
 
 	virtual void input_init(running_machine &machine) override
 	{
-		auto &devinfo = devicelist()->create_device<retro_keyboard_device>(machine, "Retro Keyboard 1", "Retro Keyboard 1", *this);
+		auto &devinfo = devicelist().create_device<retro_keyboard_device>(machine, "Retro Keyboard 1", "Retro Keyboard 1", *this);
 
 		int i;
    		for(i = 0; i < RETROK_LAST; i++){
@@ -924,7 +924,7 @@ public:
 		{
 		   sprintf(defname, "Retro mouse%d", i);
 		   
-		   auto &devinfo = devicelist()->create_device<retro_mouse_device>(machine, defname, defname, *this);
+		   auto &devinfo = devicelist().create_device<retro_mouse_device>(machine, defname, defname, *this);
 
 		   mouseLX[i]=fb_width/2;
 		   mouseLY[i]=fb_height/2;
@@ -1026,7 +1026,7 @@ public:
 			if (!input_enabled()/* || !joystick_enabled()*/)
 				return;
 
-			auto &devinfo = devicelist()->create_device<retro_joystick_device>(machine, defname, defname, *this);
+			auto &devinfo = devicelist().create_device<retro_joystick_device>(machine, defname, defname, *this);
 
 			// add the axes
 			devinfo.device()->add_item(
@@ -1172,7 +1172,7 @@ public:
 		{
 		   sprintf(defname, "Retro lightgun%d", i);
 
-		   auto &devinfo = devicelist()->create_device<retro_lightgun_device>(machine, defname, defname, *this);
+		   auto &devinfo = devicelist().create_device<retro_lightgun_device>(machine, defname, defname, *this);
 
 		   lightgunX[i]=fb_width/2;
 		   lightgunY[i]=fb_height/2;
