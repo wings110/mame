@@ -551,6 +551,8 @@ if (BUSES["BBC_INTERNAL"]~=null) then
 		MAME_DIR .. "src/devices/bus/bbc/internal/cumana68k.h",
 		MAME_DIR .. "src/devices/bus/bbc/internal/integrab.cpp",
 		MAME_DIR .. "src/devices/bus/bbc/internal/integrab.h",
+		MAME_DIR .. "src/devices/bus/bbc/internal/memex.cpp",
+		MAME_DIR .. "src/devices/bus/bbc/internal/memex.h",
 		MAME_DIR .. "src/devices/bus/bbc/internal/morleyaa.cpp",
 		MAME_DIR .. "src/devices/bus/bbc/internal/morleyaa.h",
 		MAME_DIR .. "src/devices/bus/bbc/internal/overlay.cpp",
@@ -937,6 +939,8 @@ if (BUSES["C64"]~=null) then
 		MAME_DIR .. "src/devices/bus/c64/xl80.h",
 		MAME_DIR .. "src/devices/bus/c64/zaxxon.cpp",
 		MAME_DIR .. "src/devices/bus/c64/zaxxon.h",
+		MAME_DIR .. "src/devices/bus/c64/z80videopak.cpp",
+		MAME_DIR .. "src/devices/bus/c64/z80videopak.h",
 		MAME_DIR .. "src/devices/bus/c64/user.cpp",
 		MAME_DIR .. "src/devices/bus/c64/user.h",
 		MAME_DIR .. "src/devices/bus/c64/4dxh.cpp",
@@ -1854,6 +1858,12 @@ if (BUSES["MTX"]~=null) then
 	files {
 		MAME_DIR .. "src/devices/bus/mtx/exp.cpp",
 		MAME_DIR .. "src/devices/bus/mtx/exp.h",
+		MAME_DIR .. "src/devices/bus/mtx/cfx.cpp",
+		MAME_DIR .. "src/devices/bus/mtx/cfx.h",
+		MAME_DIR .. "src/devices/bus/mtx/magrom.cpp",
+		MAME_DIR .. "src/devices/bus/mtx/magrom.h",
+		MAME_DIR .. "src/devices/bus/mtx/rompak.cpp",
+		MAME_DIR .. "src/devices/bus/mtx/rompak.h",
 		MAME_DIR .. "src/devices/bus/mtx/sdx.cpp",
 		MAME_DIR .. "src/devices/bus/mtx/sdx.h",
 	}
@@ -2079,6 +2089,43 @@ if (BUSES["POFO"]~=null) then
 	}
 end
 
+---------------------------------------------------
+--
+--@src/devices/bus/rc2014/rc2014.h,BUSES["RC2014"] = true
+---------------------------------------------------
+
+if (BUSES["RC2014"]~=null) then
+	files {
+		MAME_DIR .. "src/devices/bus/rc2014/rc2014.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/rc2014.h",
+		MAME_DIR .. "src/devices/bus/rc2014/cf.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/cf.h",
+		MAME_DIR .. "src/devices/bus/rc2014/clock.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/clock.h",
+		MAME_DIR .. "src/devices/bus/rc2014/fdc.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/fdc.h",
+		MAME_DIR .. "src/devices/bus/rc2014/ide.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/ide.h",
+		MAME_DIR .. "src/devices/bus/rc2014/micro.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/micro.h",
+		MAME_DIR .. "src/devices/bus/rc2014/modules.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/modules.h",
+		MAME_DIR .. "src/devices/bus/rc2014/ram.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/ram.h",
+		MAME_DIR .. "src/devices/bus/rc2014/rom.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/rom.h",
+		MAME_DIR .. "src/devices/bus/rc2014/romram.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/romram.h",
+		MAME_DIR .. "src/devices/bus/rc2014/rtc.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/rtc.h",
+		MAME_DIR .. "src/devices/bus/rc2014/serial.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/serial.h",
+		MAME_DIR .. "src/devices/bus/rc2014/sound.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/sound.h",
+		MAME_DIR .. "src/devices/bus/rc2014/z80cpu.cpp",
+		MAME_DIR .. "src/devices/bus/rc2014/z80cpu.h",
+	}
+end
 
 ---------------------------------------------------
 --
@@ -2406,6 +2453,8 @@ if (BUSES["VME"]~=null) then
 		MAME_DIR .. "src/devices/bus/vme/vme_fcscsi.h",
 		MAME_DIR .. "src/devices/bus/vme/vme_hcpu30.cpp",
 		MAME_DIR .. "src/devices/bus/vme/vme_hcpu30.h",
+		MAME_DIR .. "src/devices/bus/vme/vme_smvme2000.cpp",
+		MAME_DIR .. "src/devices/bus/vme/vme_smvme2000.h",
 	}
 end
 
@@ -4667,10 +4716,14 @@ if (BUSES["MULTIBUS"]~=null) then
 		MAME_DIR .. "src/devices/bus/multibus/multibus.h",
 		MAME_DIR .. "src/devices/bus/multibus/isbc202.cpp",
 		MAME_DIR .. "src/devices/bus/multibus/isbc202.h",
+		MAME_DIR .. "src/devices/bus/multibus/isbc8024.cpp",
+		MAME_DIR .. "src/devices/bus/multibus/isbc8024.h",
 		MAME_DIR .. "src/devices/bus/multibus/cpuap.cpp",
 		MAME_DIR .. "src/devices/bus/multibus/cpuap.h",
 		MAME_DIR .. "src/devices/bus/multibus/serad.cpp",
 		MAME_DIR .. "src/devices/bus/multibus/serad.h",
+		MAME_DIR .. "src/devices/bus/multibus/labtam3232.cpp",
+		MAME_DIR .. "src/devices/bus/multibus/labtam3232.h",
 	}
 end
 
@@ -4807,5 +4860,25 @@ if (BUSES["PCE_CTRL"]~=null) then
 		MAME_DIR .. "src/devices/bus/pce_ctrl/joypad6.h",
 		MAME_DIR .. "src/devices/bus/pce_ctrl/multitap.cpp",
 		MAME_DIR .. "src/devices/bus/pce_ctrl/multitap.h",
+	}
+end
+
+---------------------------------------------------
+--
+--@src/devices/bus/pc8801/pc8801_31.h,BUSES["PC8801"] = true
+---------------------------------------------------
+
+if (BUSES["PC8801"]~=null) then
+	files {
+		MAME_DIR .. "src/devices/bus/pc8801/pc8801_23.cpp",
+		MAME_DIR .. "src/devices/bus/pc8801/pc8801_23.h",
+		MAME_DIR .. "src/devices/bus/pc8801/pc8801_31.cpp",
+		MAME_DIR .. "src/devices/bus/pc8801/pc8801_31.h",
+		MAME_DIR .. "src/devices/bus/pc8801/pc8801_exp.cpp",
+		MAME_DIR .. "src/devices/bus/pc8801/pc8801_exp.h",
+		MAME_DIR .. "src/devices/bus/pc8801/pcg8100.cpp",
+		MAME_DIR .. "src/devices/bus/pc8801/pcg8100.h",
+		MAME_DIR .. "src/devices/bus/pc8801/jmbx1.cpp",
+		MAME_DIR .. "src/devices/bus/pc8801/jmbx1.h",
 	}
 end
