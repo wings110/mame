@@ -63,6 +63,7 @@ extern bool experimental_cmdline;
 extern bool hide_gameinfo;
 extern bool mouse_enable;
 extern int  lightgun_mode;
+extern int  lightgun_offscreen_mode;
 extern bool cheats_enable;
 extern bool alternate_renderer;
 extern bool boot_to_osd_enable;

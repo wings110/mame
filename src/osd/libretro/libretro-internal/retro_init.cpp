@@ -48,6 +48,7 @@ int mame_reset = -1;
 bool nobuffer_enable = false;
 bool mouse_enable = false;
 int  lightgun_mode = RETRO_SETTING_LIGHTGUN_MODE_DISABLED;
+int  lightgun_offscreen_mode = 1;
 bool cheats_enable = false;
 bool alternate_renderer = false;
 bool boot_to_osd_enable = false;
