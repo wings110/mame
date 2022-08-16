@@ -338,6 +338,8 @@ void Input_Binding(running_machine &machine)
               !core_stricmp(machine.system().parent, "sftm") ||
               !core_stricmp(machine.system().name, "sfz2al") ||
               !core_stricmp(machine.system().parent, "sfz2al") ||
+              !core_stricmp(machine.system().name, "sfzch") ||
+              !core_stricmp(machine.system().parent, "sfzch") ||
               !core_stricmp(machine.system().name, "ssf2") ||
               !core_stricmp(machine.system().parent, "ssf2") ||
               !core_stricmp(machine.system().name, "ssf2t") ||
