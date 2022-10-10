@@ -60,7 +60,6 @@ extern const char *retro_content_directory;
 extern int retro_pause;
 
 extern bool experimental_cmdline;
-extern bool hide_gameinfo;
 extern bool mouse_enable;
 extern int  lightgun_mode;
 extern int  lightgun_offscreen_mode;
@@ -72,8 +71,6 @@ extern bool softlist_enable;
 extern bool softlist_auto;
 extern bool write_config_enable;
 extern bool read_config_enable;
-extern bool hide_nagscreen;
-extern bool hide_warnings;
 extern bool throttle_enable;
 extern bool auto_save_enable;
 extern bool game_specific_saves_enable;
@@ -81,9 +78,6 @@ extern bool buttons_profiles;
 extern bool mame_paths_enable;
 extern bool mame_4way_enable;
 extern char mame_4way_map[256];
-
-extern bool res_43;
-extern bool video_changed;
 
 extern int mouseLX[8];
 extern int mouseLY[8];

@@ -25,13 +25,12 @@ extern const char bare_build_version[];
 int retro_pause = 0;
 bool retro_load_ok=false;
 
-//Use alternate render by default with screen resolution 640x480
-//FIXME: add option to choose alternate render resolution (or use native res)
 int fb_width   = 640;
 int fb_height  = 480;
-int fb_pitch   = 640;
-int max_width   = 640;
-int max_height  = 480;
+int fb_pitch   = fb_width;
+int max_width  = fb_width;
+int max_height = fb_height;
+
 float retro_aspect =(float)4.0f/(float)3.0f ;
 float retro_fps = 60.0;
 float view_aspect=1.0f; // aspect for current view
@@ -290,41 +289,34 @@ static void check_variables(void)
          throttle_enable = true;
    }
 
-   var.key   = option_res;
+    var.key   = option_res;
    var.value = NULL;
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
 
-if(alternate_renderer==true)
-{
-      char *pch;
-      char str[100];
-	  snprintf(str, sizeof(str), "%s", var.value);
+      if(alternate_renderer==true)
+      {
+         char *pch;
+         char str[100];
+	     snprintf(str, sizeof(str), "%s", var.value);
 
-      pch = strtok(str, "x");
-      if (pch){
-         fb_width = strtoul(pch, NULL, 0);
-	 fb_pitch=fb_width;
-      }
-      pch = strtok(NULL, "x");
-      if (pch)
+         pch = strtok(str, "x");
+         if (pch)
+         {
+            fb_width = strtoul(pch, NULL, 0);
+	        fb_pitch=fb_width;
+         }
+
+         pch = strtok(NULL, "x");
+
+         if (pch)
          fb_height = strtoul(pch, NULL, 0);
 
-      fprintf(stderr, "[libretro-test]: Got size: %u x %u.\n", fb_width, fb_height);
-retro_aspect =(float)fb_width/(float)fb_height ;
-
-      if ( (int)(fb_width/4) ==(int)(fb_height/3) )
-         res_43 = true;
-      else
-         res_43 = false;
-
-	NEWGAME_FROM_OSD=1;
-video_changed=true;
-}
-
+         fprintf(stderr, "[libretro-test]: Got size: %u x %u.\n", fb_width, fb_height);
+      }
+ NEWGAME_FROM_OSD=1;
    }
-
 
    var.key   = option_nobuffer;
    var.value = NULL;
@@ -360,16 +352,14 @@ video_changed=true;
 
    var.key   = option_renderer;
    var.value = NULL;
-
+  
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
+		
       if (!strcmp(var.value, "disabled"))
          alternate_renderer = false;
       if (!strcmp(var.value, "enabled"))
          alternate_renderer = true;
-	video_changed=true;
-	NEWGAME_FROM_OSD=1;
-
    }
 
    var.key   = option_osd;
@@ -571,11 +561,20 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
    if (log_cb)
       log_cb(RETRO_LOG_INFO, "AV_INFO: width=%d height=%d\n",info->geometry.base_width,info->geometry.base_height);
 
-   info->geometry.max_width  = fb_width;
-   info->geometry.max_height = fb_height;
-   max_width=fb_width;
-   max_height=fb_height;
-
+   /*mimic previous behaviour set this properly when i find out why we are using this alt rendered because games like sf2 and tekken pixels
+    * dont match the 4:3 calculation if its for switchres
+    */  
+   if (alternate_renderer == false) 
+   {
+      info->geometry.max_width  = 640;
+      info->geometry.max_height = 480;
+   }
+   else 
+   {
+      info->geometry.max_width  = fb_width;
+      info->geometry.max_height = fb_height;
+   }
+ 
    if (log_cb)
       log_cb(RETRO_LOG_INFO, "AV_INFO: max_width=%d max_height=%d\n",info->geometry.max_width,info->geometry.max_height);
 
