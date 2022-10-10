@@ -31,6 +31,7 @@
 #include "window.h"
 #include "osdretro.h"
 
+#include "modules/osdwindow.h" 
 #include "modules/render/drawretro.h"
 #include "modules/monitor/monitor_common.h"
 
@@ -206,26 +207,20 @@ void retro_window_info::show_pointer()
 //  sdlwindow_resize
 //============================================================
 extern int NEWGAME_FROM_OSD;
-static int first_time=1;
 
 void retro_window_info::resize(int32_t width, int32_t height)
 {
 	osd_dim cd = get_size();
 
-	printf("resize-it %f\n",m_monitor->aspect());
-
-	if (width != cd.width() || height != cd.height() ||first_time==1)
+	if (width != cd.width() || height != cd.height() )
 	{
-//		SDL_SetWindowSize(platform_window<SDL_Window*>(), width, height);
-
-         fb_width=width; 
-         fb_height=height;
-         fb_pitch=width;
-         retro_aspect =m_monitor->pixel_aspect();// m_monitor->/*pixel_*/aspect();//(float)width/(float)height;
-	 NEWGAME_FROM_OSD  = 1;
-	 first_time =0;
-		renderer().notify_changed();
+        fb_width=width; 
+        fb_height=height;
+        fb_pitch=width;
 	}
+
+	NEWGAME_FROM_OSD  = 1;
+	notify_changed();
 }
 
 
@@ -396,29 +391,13 @@ int retro_window_info::window_init()
 	
 	oldfps=retro_fps;
 
+// retrofixme this shouldnt be here
     const screen_device *primary_screen = screen_device_enumerator(machine().root_device()).first();
 
     if (primary_screen != nullptr){
         retro_fps = primary_screen->frame_period().as_hz();
 	}
-
-	if(alternate_renderer==false){
-	//test correct aspect
-		retro_aspect = target()->current_view().effective_aspect();
-
-		if(target()->orientation() & ORIENTATION_SWAP_XY)retro_aspect=1.0/retro_aspect;
-
-		int tempwidth, tempheight;
-		target()->compute_minimum_size(tempwidth, tempheight);
-		fb_width=tempwidth;
-		fb_pitch=tempwidth;
-		fb_height=tempheight;
-
-		if(fb_width>max_width || fb_height>max_height || oldfps!=retro_fps)
-			NEWGAME_FROM_OSD = 1;
-		else NEWGAME_FROM_OSD = 2;
-
-	}
+// retrofixme end 
 
 	// handle error conditions
 	if (result == 1)
@@ -480,6 +459,7 @@ osd_dim retro_window_info::pick_best_mode()
 //  (main thread)
 //============================================================
 
+
 void retro_window_info::update()
 {
 	osd_ticks_t     event_wait_ticks;
@@ -493,7 +473,7 @@ void retro_window_info::update()
 	if (target() != nullptr)
 	{
 		int tempwidth, tempheight;
-
+	
 		if(alternate_renderer==false){
 			view_aspect = target()->current_view().effective_aspect();
 			if(target()->orientation() & ORIENTATION_SWAP_XY)view_aspect=1.0f/view_aspect;
@@ -501,37 +481,10 @@ void retro_window_info::update()
 
 		// see if the games video mode has changed
 		target()->compute_minimum_size(tempwidth, tempheight);
-		if (osd_dim(tempwidth, tempheight) != m_minimum_dim || view_aspect!=retro_aspect)
+		if (osd_dim(tempwidth, tempheight) != m_minimum_dim || view_aspect!=retro_aspect )
 		{
 			m_minimum_dim = osd_dim(tempwidth, tempheight);
 
-
-			if(alternate_renderer==false)
-			{
-
-				fb_width=tempwidth;
-				fb_pitch=tempwidth;
-				fb_height=tempheight;
-
-				//if(video_changed==true)
-				{
-				//retro_aspect = (float)tempwidth/(float)tempheight;
-
-				retro_aspect = target()->current_view().effective_aspect();
-				if(target()->orientation() & ORIENTATION_SWAP_XY)retro_aspect=1.0/retro_aspect;
-				view_aspect =retro_aspect;
-				monitor()->refresh();
-				monitor()->update_resolution(tempwidth, tempheight);
-				//osd_printf_info("(%dx%d)as:%f rot:%d %d\n",tempwidth, tempheight,retro_aspect,target()->orientation(),target()->orientation() & ORIENTATION_SWAP_XY);
-
-				if(fb_width>max_width || fb_height>max_height)
-					NEWGAME_FROM_OSD = 1;
-				else (NEWGAME_FROM_OSD==1)?NEWGAME_FROM_OSD = 1:NEWGAME_FROM_OSD = 2;
-
-					video_changed=false;
-				}
-
-			}
 
 			if (!this->m_fullscreen)
 			{
@@ -543,6 +496,50 @@ void retro_window_info::update()
 				osd_dim tmp = this->pick_best_mode();
 				resize(tmp.width(), tmp.height());
 			}
+			else if (alternate_renderer==false)
+			{
+				/* im not sure why this is even here since we have switchres.  change max and min bounds to zero if you need exact resolution
+				 * I will leave this with old behaviour in tact as soon as. I get a feeling it was an attempst at a switchres and that can be 
+				 * is already supported id you enable it
+				 * */
+				
+				osd_dim test = get_max_bounds(1);
+				bool test2 = 0;
+				
+			
+			    //check lower and higher 
+			    
+				if ( tempwidth > test.width() ||  tempheight > test.height())
+				{
+					tempwidth  = test.width();
+					tempheight = test.height();
+					test2 =1;
+					
+				}
+								
+				else if (!test2)
+				{
+                   osd_dim test = get_min_bounds(1);				
+				   if ( tempwidth < test.width() ||  tempheight < test.height())
+				   {
+			 
+					   tempwidth  = test.width();
+					   tempheight = test.height();
+				   }
+				}
+
+				//retro_aspect = target()->current_view().effective_aspect();
+				if(target()->orientation() & ORIENTATION_SWAP_XY)retro_aspect=1.0/retro_aspect;
+				//view_aspect =retro_aspect;
+				monitor()->refresh();
+				monitor()->update_resolution(640, 480);
+				resize(tempwidth, tempheight);
+				
+			}
+		}
+		else if (alternate_renderer==true)
+		{
+			monitor()->update_resolution(tempwidth, tempheight);
 		}
 
 		if (video_config.waitvsync && video_config.syncrefresh)
@@ -561,8 +558,8 @@ void retro_window_info::update()
 			// and redraw now
 
 			// Some configurations require events to be polled in the worker thread
-//FIXME RETRO
-		//	downcast< retro_osd_interface& >(machine().osd()).process_events_buf();
+			//FIXME RETRO
+			//	downcast< retro_osd_interface& >(machine().osd()).process_events_buf();
 
 			// Check whether window has vector screens
 
@@ -945,8 +942,7 @@ osd_dim retro_window_info::get_size()
 
 	return osd_dim(w,h);
 }
-
-
+	
 //============================================================
 //  get_max_bounds
 //  (window thread)
