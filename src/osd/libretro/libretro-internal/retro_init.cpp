@@ -372,7 +372,7 @@ static void Set_Default_Option(void)
    {
       char option[50];
       Add_Option("-statename");
-      sprintf(option,"%%g/%s",MgameName);
+      snprintf(option, sizeof(option), "%%g/%s", MgameName);
       Add_Option(option);
    }
 
@@ -398,16 +398,16 @@ static void Set_Path_Option(void)
       if(opt_type[i] == 0)
       {
          if (retro_save_directory)
-            sprintf(tmp_dir, "%s%c%s%c%s", retro_save_directory, slash, core, slash,dir_name[i]);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_save_directory, slash, core, slash,dir_name[i]);
          else
-            sprintf(tmp_dir, "%s%c%s%c%s%c", ".", slash, core, slash,dir_name[i],slash);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash,dir_name[i],slash);
       }
       else
       {
          if(retro_system_directory)
-            sprintf(tmp_dir, "%s%c%s%c%s", retro_system_directory, slash, core, slash,dir_name[i]);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_system_directory, slash, core, slash,dir_name[i]);
          else
-            sprintf(tmp_dir, "%s%c%s%c%s%c", ".", slash, core, slash,dir_name[i],slash);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash,dir_name[i],slash);
       }
 
       Add_Option((char*)(tmp_dir));
@@ -422,7 +422,7 @@ static void Set_Path_Option(void)
 static int execute_game(char* path)
 {
    unsigned i;
-   char tmp_dir[256];
+   char tmp_dir[512];
    int gameRot=0;
    int driverIndex;
 
@@ -507,7 +507,13 @@ static int execute_game(char* path)
 
    if(!boot_to_osd_enable)
    {
-      sprintf(tmp_dir, "%s", MgamePath);
+      if (retro_system_directory)
+         snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s%c%s%c%s;%s%c%s%c%s",
+               MgamePath,
+               retro_system_directory, slash, core, slash, "bios",
+               retro_system_directory, slash, core, slash, "roms");
+      else
+         snprintf(tmp_dir, sizeof(tmp_dir), "%s", MgamePath);
       Add_Option((char*)(tmp_dir));
 
       if(softlist_enable)
@@ -539,7 +545,7 @@ static int execute_game(char* path)
    }
    else
    {
-      sprintf(tmp_dir, "%s;%s", MgamePath,MparentPath);
+      snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s", MgamePath, MparentPath);
       Add_Option((char*)(tmp_dir));
    }
 
