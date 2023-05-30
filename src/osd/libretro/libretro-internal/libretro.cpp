@@ -629,6 +629,7 @@ static void fallback_log(enum retro_log_level level, const char *fmt, ...)
 
 void retro_init(void)
 {
+   retro_pause = 0;
    const char *system_dir  = NULL;
    const char *content_dir = NULL;
    const char *save_dir    = NULL;
