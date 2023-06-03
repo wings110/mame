@@ -24,8 +24,6 @@ For Windows install `lld` for much faster linking.
 
 [![Join the chat at https://gitter.im/mamedev/mame](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mamedev/mame?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<<<<<<< HEAD
-=======
 Continuous integration build status:
 
 | OS/Compiler                 | Status        |
@@ -41,7 +39,6 @@ Static analysis status for entire build (except for third-party parts of project
 
 [![Coverity Scan Status](https://scan.coverity.com/projects/5727/badge.svg?flat=1)](https://scan.coverity.com/projects/mame-emulator)
 
->>>>>>> mamedev/master
 What is MAME?
 =============
 

@@ -262,6 +262,8 @@ void osd_common_t::register_options()
 	REGISTER_MODULE(m_mod_man, RENDERER_SDL1);
 #endif
 	REGISTER_MODULE(m_mod_man, RENDERER_NONE);
+#else
+	REGISTER_MODULE(m_mod_man, RENDERER_RETRO);
 #endif
 
 #ifndef __LIBRETRO__

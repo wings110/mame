@@ -231,7 +231,7 @@ void mame_machine_manager::start_luaengine()
 extern mame_machine_manager *retro_manager;
 static running_machine *retro_global_machine;
 static const machine_config *retro_global_config;
-int ENDEXEC=0;
+int ENDEXEC = 0;
 static bool firstgame = true;
 bool started_empty = false;
 #endif
@@ -287,7 +287,6 @@ int mame_machine_manager::execute()
 		}
 
 #if defined(__LIBRETRO__)
-
 		retro_global_config = new machine_config(*system, m_options);
 
 		retro_global_machine = new running_machine(*retro_global_config, *this);
@@ -338,7 +337,7 @@ int mame_machine_manager::execute()
 }
 
 #if defined(__LIBRETRO__)
-extern int RLOOP,retro_pause;
+extern int RLOOP, retro_pause;
 extern void retro_loop(running_machine *machine);
 extern void retro_execute();
 extern core_options *retro_global_options;
@@ -377,7 +376,7 @@ extern void free_man();
 
 void retro_finish()
 {
-	retro_global_machine->retro_machineexit();
+	retro_global_machine->retro_machine_exit();
 	free_machineconfig();
 	free_man();
 }

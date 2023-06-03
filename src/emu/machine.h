@@ -164,9 +164,10 @@ public:
 	template <class DeviceClass> [[deprecated("absolute tag lookup; use subdevice or finder instead")]] inline DeviceClass *device(const char *tag) { return downcast<DeviceClass *>(root_device().subdevice(tag)); }
 
 #if defined(__LIBRETRO__)
-void retro_machineexit();
-void retro_loop();
+	void retro_machine_exit();
+	void retro_loop();
 #endif
+
 	// immediate operations
 	int run(bool quiet);
 	void pause();

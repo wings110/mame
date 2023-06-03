@@ -19,36 +19,36 @@ namespace {
 
 #define CORE_INPUT_TYPES_P1 \
 		CORE_INPUT_TYPES_BEGIN(p1) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_UP, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1UP_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_DOWN, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1DOWN_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_LEFT, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1LEFT_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_RIGHT, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1RIGHT_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_UP,    N_p("input-name", "%p Right Stick/Up"),      input_seq(KEYCODE_I, input_seq::or_code, JOYCODE_BUTTON2_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_DOWN,  N_p("input-name", "%p Right Stick/Down"),    input_seq(KEYCODE_K, input_seq::or_code, JOYCODE_BUTTON3_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_LEFT,  N_p("input-name", "%p Right Stick/Left"),    input_seq(KEYCODE_J, input_seq::or_code, JOYCODE_BUTTON1_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_RIGHT, N_p("input-name", "%p Right Stick/Right"),   input_seq(KEYCODE_L, input_seq::or_code, JOYCODE_BUTTON4_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_UP,     N_p("input-name", "%p Left Stick/Up"),       input_seq(KEYCODE_E, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_DOWN,   N_p("input-name", "%p Left Stick/Down"),     input_seq(KEYCODE_D, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_LEFT,   N_p("input-name", "%p Left Stick/Left"),     input_seq(KEYCODE_S, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_RIGHT,  N_p("input-name", "%p Left Stick/Right"),    input_seq(KEYCODE_F, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq(KEYCODE_LCONTROL, input_seq::or_code, JOYCODE_BUTTON1_INDEXED(0), input_seq::or_code, MOUSECODE_BUTTON1_INDEXED(0), input_seq::or_code, GUNCODE_BUTTON1_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq(KEYCODE_LALT, input_seq::or_code, JOYCODE_BUTTON2_INDEXED(0), input_seq::or_code, MOUSECODE_BUTTON3_INDEXED(0), input_seq::or_code, GUNCODE_BUTTON2_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq(KEYCODE_SPACE, input_seq::or_code, JOYCODE_BUTTON3_INDEXED(0), input_seq::or_code, MOUSECODE_BUTTON2_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq(KEYCODE_LSHIFT, input_seq::or_code, JOYCODE_BUTTON4_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq(KEYCODE_Z, input_seq::or_code, JOYCODE_BUTTON5_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq(KEYCODE_X, input_seq::or_code, JOYCODE_BUTTON6_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq(KEYCODE_C, input_seq::or_code, JOYCODE_BUTTON7_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq(KEYCODE_V, input_seq::or_code, JOYCODE_BUTTON8_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq(KEYCODE_B, input_seq::or_code, JOYCODE_BUTTON9_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq(KEYCODE_N, input_seq::or_code, JOYCODE_BUTTON10_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq(KEYCODE_M, input_seq::or_code, JOYCODE_BUTTON11_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq(KEYCODE_COMMA, input_seq::or_code, JOYCODE_BUTTON12_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq(KEYCODE_STOP, input_seq::or_code, JOYCODE_BUTTON13_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq(KEYCODE_SLASH, input_seq::or_code, JOYCODE_BUTTON14_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq(KEYCODE_RSHIFT, input_seq::or_code, JOYCODE_BUTTON15_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq(JOYCODE_BUTTON16_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  START,               N_p("input-name", "%p Start"),               input_seq(KEYCODE_1, input_seq::or_code, JOYCODE_START_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  SELECT,              N_p("input-name", "%p Select"),              input_seq(KEYCODE_5, input_seq::or_code, JOYCODE_SELECT_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_UP) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_DOWN) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_LEFT) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_RIGHT) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_UP,    N_p("input-name", "%p Right Stick/Up"),      input_seq(KEYCODE_I) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_DOWN,  N_p("input-name", "%p Right Stick/Down"),    input_seq(KEYCODE_K) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_LEFT,  N_p("input-name", "%p Right Stick/Left"),    input_seq(KEYCODE_J) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKRIGHT_RIGHT, N_p("input-name", "%p Right Stick/Right"),   input_seq(KEYCODE_L) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_UP,     N_p("input-name", "%p Left Stick/Up"),       input_seq(KEYCODE_E) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_DOWN,   N_p("input-name", "%p Left Stick/Down"),     input_seq(KEYCODE_D) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_LEFT,   N_p("input-name", "%p Left Stick/Left"),     input_seq(KEYCODE_S) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  JOYSTICKLEFT_RIGHT,  N_p("input-name", "%p Left Stick/Right"),    input_seq(KEYCODE_F) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq(KEYCODE_LCONTROL, input_seq::or_code, MOUSECODE_BUTTON1_INDEXED(0), input_seq::or_code, GUNCODE_BUTTON1_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq(KEYCODE_LALT, input_seq::or_code, MOUSECODE_BUTTON3_INDEXED(0), input_seq::or_code, GUNCODE_BUTTON2_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq(KEYCODE_SPACE, input_seq::or_code, MOUSECODE_BUTTON2_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq(KEYCODE_LSHIFT) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq(KEYCODE_Z) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq(KEYCODE_X) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq(KEYCODE_C) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq(KEYCODE_V) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq(KEYCODE_B) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq(KEYCODE_N) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq(KEYCODE_M) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq(KEYCODE_COMMA) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq(KEYCODE_STOP) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq(KEYCODE_SLASH) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq(KEYCODE_RSHIFT) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  START,               N_p("input-name", "%p Start"),               input_seq(KEYCODE_1) ) \
+		INPUT_PORT_DIGITAL_TYPE(  1, PLAYER1,  SELECT,              N_p("input-name", "%p Select"),              input_seq(KEYCODE_5) ) \
 		CORE_INPUT_TYPES_END()
 
 #define CORE_INPUT_TYPES_P1_MAHJONG \
@@ -137,10 +137,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P2 \
 		CORE_INPUT_TYPES_BEGIN(p2) \
-		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_R, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_HAT1UP_INDEXED(1)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_F, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_HAT1DOWN_INDEXED(1)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_D, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_HAT1LEFT_INDEXED(1)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_G, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_HAT1RIGHT_INDEXED(1)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_R) ) \
+		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_F) ) \
+		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_D) ) \
+		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_G) ) \
 		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICKRIGHT_UP,    N_p("input-name", "%p Right Stick/Up"),      input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICKRIGHT_DOWN,  N_p("input-name", "%p Right Stick/Down"),    input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  2, PLAYER2,  JOYSTICKRIGHT_LEFT,  N_p("input-name", "%p Right Stick/Left"),    input_seq() ) \
@@ -218,10 +218,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P3 \
 		CORE_INPUT_TYPES_BEGIN(p3) \
-		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_I, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_HAT1UP_INDEXED(2)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_K, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_HAT1DOWN_INDEXED(2)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_J, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_HAT1LEFT_INDEXED(2)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_L, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_HAT1RIGHT_INDEXED(2)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_I) ) \
+		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_K) ) \
+		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_J) ) \
+		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_L) ) \
 		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICKRIGHT_UP,    N_p("input-name", "%p Right Stick/Up"),      input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICKRIGHT_DOWN,  N_p("input-name", "%p Right Stick/Down"),    input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  3, PLAYER3,  JOYSTICKRIGHT_LEFT,  N_p("input-name", "%p Right Stick/Left"),    input_seq() ) \
@@ -285,10 +285,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P4 \
 		CORE_INPUT_TYPES_BEGIN(p4) \
-		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_8_PAD, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_HAT1UP_INDEXED(3)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_2_PAD, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_HAT1DOWN_INDEXED(3)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_4_PAD, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_HAT1LEFT_INDEXED(3)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_6_PAD, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_HAT1RIGHT_INDEXED(3)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_UP,         N_p("input-name", "%p Up"),                  input_seq(KEYCODE_8_PAD) ) \
+		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_DOWN,       N_p("input-name", "%p Down"),                input_seq(KEYCODE_2_PAD) ) \
+		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_LEFT,       N_p("input-name", "%p Left"),                input_seq(KEYCODE_4_PAD) ) \
+		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICK_RIGHT,      N_p("input-name", "%p Right"),               input_seq(KEYCODE_6_PAD) ) \
 		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICKRIGHT_UP,    N_p("input-name", "%p Right Stick/Up"),      input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICKRIGHT_DOWN,  N_p("input-name", "%p Right Stick/Down"),    input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  4, PLAYER4,  JOYSTICKRIGHT_LEFT,  N_p("input-name", "%p Right Stick/Left"),    input_seq() ) \
@@ -364,24 +364,24 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  JOYSTICKLEFT_DOWN,   N_p("input-name", "%p Left Stick/Down"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  JOYSTICKLEFT_LEFT,   N_p("input-name", "%p Left Stick/Left"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  JOYSTICKLEFT_RIGHT,  N_p("input-name", "%p Left Stick/Right"),    input_seq() ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq(JOYCODE_BUTTON1_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq(JOYCODE_BUTTON2_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq(JOYCODE_BUTTON3_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq(JOYCODE_BUTTON4_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq(JOYCODE_BUTTON5_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq(JOYCODE_BUTTON6_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq(JOYCODE_BUTTON7_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq(JOYCODE_BUTTON8_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq(JOYCODE_BUTTON9_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq(JOYCODE_BUTTON10_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq(JOYCODE_BUTTON11_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq(JOYCODE_BUTTON12_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq(JOYCODE_BUTTON13_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq(JOYCODE_BUTTON14_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq(JOYCODE_BUTTON15_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq(JOYCODE_BUTTON16_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  START,               N_p("input-name", "%p Start"),               input_seq(JOYCODE_START_INDEXED(4)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  SELECT,              N_p("input-name", "%p Select"),              input_seq(JOYCODE_SELECT_INDEXED(4)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  START,               N_p("input-name", "%p Start"),               input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  5, PLAYER5,  SELECT,              N_p("input-name", "%p Select"),              input_seq() ) \
 		CORE_INPUT_TYPES_END()
 
 #define CORE_INPUT_TYPES_P6 \
@@ -398,24 +398,24 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  JOYSTICKLEFT_DOWN,   N_p("input-name", "%p Left Stick/Down"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  JOYSTICKLEFT_LEFT,   N_p("input-name", "%p Left Stick/Left"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  JOYSTICKLEFT_RIGHT,  N_p("input-name", "%p Left Stick/Right"),    input_seq() ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq(JOYCODE_BUTTON1_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq(JOYCODE_BUTTON2_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq(JOYCODE_BUTTON3_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq(JOYCODE_BUTTON4_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq(JOYCODE_BUTTON5_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq(JOYCODE_BUTTON6_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq(JOYCODE_BUTTON7_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq(JOYCODE_BUTTON8_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq(JOYCODE_BUTTON9_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq(JOYCODE_BUTTON10_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq(JOYCODE_BUTTON11_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq(JOYCODE_BUTTON12_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq(JOYCODE_BUTTON13_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq(JOYCODE_BUTTON14_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq(JOYCODE_BUTTON15_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq(JOYCODE_BUTTON16_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  START,               N_p("input-name", "%p Start"),               input_seq(JOYCODE_START_INDEXED(5)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  SELECT,              N_p("input-name", "%p Select"),              input_seq(JOYCODE_SELECT_INDEXED(5)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  START,               N_p("input-name", "%p Start"),               input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  6, PLAYER6,  SELECT,              N_p("input-name", "%p Select"),              input_seq() ) \
 		CORE_INPUT_TYPES_END()
 
 #define CORE_INPUT_TYPES_P7 \
@@ -432,24 +432,24 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  JOYSTICKLEFT_DOWN,   N_p("input-name", "%p Left Stick/Down"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  JOYSTICKLEFT_LEFT,   N_p("input-name", "%p Left Stick/Left"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  JOYSTICKLEFT_RIGHT,  N_p("input-name", "%p Left Stick/Right"),    input_seq() ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq(JOYCODE_BUTTON1_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq(JOYCODE_BUTTON2_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq(JOYCODE_BUTTON3_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq(JOYCODE_BUTTON4_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq(JOYCODE_BUTTON5_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq(JOYCODE_BUTTON6_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq(JOYCODE_BUTTON7_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq(JOYCODE_BUTTON8_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq(JOYCODE_BUTTON9_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq(JOYCODE_BUTTON10_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq(JOYCODE_BUTTON11_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq(JOYCODE_BUTTON12_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq(JOYCODE_BUTTON13_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq(JOYCODE_BUTTON14_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq(JOYCODE_BUTTON15_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq(JOYCODE_BUTTON16_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  START,               N_p("input-name", "%p Start"),               input_seq(JOYCODE_START_INDEXED(6)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  SELECT,              N_p("input-name", "%p Select"),              input_seq(JOYCODE_SELECT_INDEXED(6)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  START,               N_p("input-name", "%p Start"),               input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  7, PLAYER7,  SELECT,              N_p("input-name", "%p Select"),              input_seq() ) \
 		CORE_INPUT_TYPES_END()
 
 #define CORE_INPUT_TYPES_P8 \
@@ -466,24 +466,24 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  JOYSTICKLEFT_DOWN,   N_p("input-name", "%p Left Stick/Down"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  JOYSTICKLEFT_LEFT,   N_p("input-name", "%p Left Stick/Left"),     input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  JOYSTICKLEFT_RIGHT,  N_p("input-name", "%p Left Stick/Right"),    input_seq() ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq(JOYCODE_BUTTON1_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq(JOYCODE_BUTTON2_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq(JOYCODE_BUTTON3_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq(JOYCODE_BUTTON4_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq(JOYCODE_BUTTON5_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq(JOYCODE_BUTTON6_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq(JOYCODE_BUTTON7_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq(JOYCODE_BUTTON8_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq(JOYCODE_BUTTON9_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq(JOYCODE_BUTTON10_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq(JOYCODE_BUTTON11_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq(JOYCODE_BUTTON12_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq(JOYCODE_BUTTON13_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq(JOYCODE_BUTTON14_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq(JOYCODE_BUTTON15_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq(JOYCODE_BUTTON16_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  START,               N_p("input-name", "%p Start"),               input_seq(JOYCODE_START_INDEXED(7)) ) \
-		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  SELECT,              N_p("input-name", "%p Select"),              input_seq(JOYCODE_SELECT_INDEXED(7)) ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON1,             N_p("input-name", "%p Button 1"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON2,             N_p("input-name", "%p Button 2"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON3,             N_p("input-name", "%p Button 3"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON4,             N_p("input-name", "%p Button 4"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON5,             N_p("input-name", "%p Button 5"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON6,             N_p("input-name", "%p Button 6"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON7,             N_p("input-name", "%p Button 7"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON8,             N_p("input-name", "%p Button 8"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON9,             N_p("input-name", "%p Button 9"),            input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON10,            N_p("input-name", "%p Button 10"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON11,            N_p("input-name", "%p Button 11"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON12,            N_p("input-name", "%p Button 12"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON13,            N_p("input-name", "%p Button 13"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON14,            N_p("input-name", "%p Button 14"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON15,            N_p("input-name", "%p Button 15"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  BUTTON16,            N_p("input-name", "%p Button 16"),           input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  START,               N_p("input-name", "%p Start"),               input_seq() ) \
+		INPUT_PORT_DIGITAL_TYPE(  8, PLAYER8,  SELECT,              N_p("input-name", "%p Select"),              input_seq() ) \
 		CORE_INPUT_TYPES_END()
 
 #define CORE_INPUT_TYPES_P9 \
@@ -907,19 +907,8 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_RECORD_MNG,        N_p("input-name", "Record MNG"),             input_seq(KEYCODE_F12, KEYCODE_LSHIFT, input_seq::not_code, KEYCODE_LCONTROL) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_RECORD_AVI,        N_p("input-name", "Record AVI"),             input_seq(KEYCODE_F12, KEYCODE_LSHIFT, KEYCODE_LCONTROL) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_TOGGLE_CHEAT,      N_p("input-name", "Toggle Cheat"),           input_seq(KEYCODE_F6) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_UP,                N_p("input-name", "UI Up"),                  input_seq(KEYCODE_UP, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1UP_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_DOWN,              N_p("input-name", "UI Down"),                input_seq(KEYCODE_DOWN, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1DOWN_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_LEFT,              N_p("input-name", "UI Left"),                input_seq(KEYCODE_LEFT, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1LEFT_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_RIGHT,             N_p("input-name", "UI Right"),               input_seq(KEYCODE_RIGHT, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_HAT1RIGHT_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_HOME,              N_p("input-name", "UI Home"),                input_seq(KEYCODE_HOME) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_END,               N_p("input-name", "UI End"),                 input_seq(KEYCODE_END) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_PAGE_UP,           N_p("input-name", "UI Page Up"),             input_seq(KEYCODE_PGUP) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_PAGE_DOWN,         N_p("input-name", "UI Page Down"),           input_seq(KEYCODE_PGDN) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_FOCUS_NEXT,        N_p("input-name", "UI Focus Next"),          input_seq(KEYCODE_TAB, input_seq::not_code, KEYCODE_LSHIFT, input_seq::not_code, KEYCODE_RSHIFT) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_FOCUS_PREV,        N_p("input-name", "UI Focus Previous"),      input_seq(KEYCODE_TAB, KEYCODE_LSHIFT, input_seq::or_code, KEYCODE_TAB, KEYCODE_RSHIFT) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_SELECT,            N_p("input-name", "UI Select"),              input_seq(KEYCODE_ENTER, input_seq::not_code, KEYCODE_LALT, input_seq::not_code, KEYCODE_RALT, input_seq::or_code, JOYCODE_BUTTON1_INDEXED(0), input_seq::or_code, KEYCODE_ENTER_PAD) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_CANCEL,            N_p("input-name", "UI Cancel"),              input_seq(KEYCODE_ESC) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_EXIT_GAME,         N_p("input-name", "Exit Game"),              input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_DISPLAY_COMMENT,   N_p("input-name", "UI Display Comment"),     input_seq(KEYCODE_SPACE) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_ZOOM_IN,           N_p("input-name", "UI Zoom In"),             input_seq(KEYCODE_EQUALS) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_ZOOM_OUT,          N_p("input-name", "UI Zoom Out"),            input_seq(KEYCODE_MINUS) ) \

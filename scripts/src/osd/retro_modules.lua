@@ -75,6 +75,8 @@ function osdmodulesbuild()
 		MAME_DIR .. "src/osd/modules/netdev/none.cpp",
 		MAME_DIR .. "src/osd/modules/midi/none.cpp",
 		MAME_DIR .. "src/osd/modules/sound/none.cpp",
+		MAME_DIR .. "src/osd/modules/input/assignmenthelper.cpp",
+		MAME_DIR .. "src/osd/modules/input/assignmenthelper.h",
 		MAME_DIR .. "src/osd/modules/input/input_module.h",
 		MAME_DIR .. "src/osd/modules/input/input_common.cpp",
 		MAME_DIR .. "src/osd/modules/input/input_common.h",
