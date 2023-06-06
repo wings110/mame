@@ -204,7 +204,7 @@ int mmain(int argc, char *argv[])
 	// FIXME: this should be done differently
 
 #ifdef RETROMAME_UNIX
-	sdl_entered_debugger = 0;
+	retro_entered_debugger = 0;
 #if (!defined(SDLMAME_MACOSX)) && (!defined(SDLMAME_HAIKU)) && (!defined(SDLMAME_EMSCRIPTEN)) && (!defined(SDLMAME_ANDROID))  && (!defined(RETROMAME))
 	FcInit();
 #endif
@@ -228,7 +228,7 @@ int mmain(int argc, char *argv[])
 
 #ifdef RETROMAME_UNIX
 #if (!defined(SDLMAME_MACOSX)) && (!defined(SDLMAME_HAIKU)) && (!defined(SDLMAME_EMSCRIPTEN)) && (!defined(SDLMAME_ANDROID)) && (!defined(RETROMAME))
-	if (!sdl_entered_debugger)
+	if (!retro_entered_debugger)
 	{
 		FcFini();
 	}
