@@ -377,7 +377,7 @@ static void Set_Default_Option(void)
 
    if (game_specific_saves_enable)
    {
-      char option[50];
+      char option[1024];
       Add_Option("-statename");
       snprintf(option, sizeof(option), "%%g/%s", MgameName);
       Add_Option(option);
@@ -387,7 +387,7 @@ static void Set_Default_Option(void)
 static void Set_Path_Option(void)
 {
    int i;
-   char tmp_dir[256];
+   char tmp_dir[2048];
 
    /*Setup path option according to retro (save/system) directory,
     * or current if NULL. */
@@ -423,7 +423,7 @@ static void Set_Path_Option(void)
 static int execute_game(char* path)
 {
    unsigned i;
-   char tmp_dir[512];
+   char tmp_dir[2048];
    int gameRot = 0;
    int screenRot = 0;
    int driverIndex;
