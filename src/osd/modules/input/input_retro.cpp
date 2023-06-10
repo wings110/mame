@@ -1058,7 +1058,9 @@ public:
 			return;
 
 		char defname[32];
-		
+
+		mouse_count = 0;
+
 		for (int i = 0; i < 8; i++)
 		{
 			sprintf(defname, "RetroMouse%d", i);
@@ -1240,7 +1242,6 @@ public:
 			generic_button_get_state<std::uint8_t>,
 			&joystate[joy_count].button[RETROPAD_PAD_RIGHT]);
 
-
 		joy_count++;
 
 		// directions, analog stick
@@ -1335,7 +1336,9 @@ public:
 	{
 		retro_input_module<retro_joystick_device>::input_init(machine);
 
- 		char defname[32];
+		char defname[32];
+
+		joy_count = 0;
 
 		if (buttons_profiles)
 			Input_Binding(machine);
@@ -1445,6 +1448,8 @@ public:
 			return;
 
 		char defname[32];
+
+		lightgun_count = 0;
 
 		for (int i = 0; i < 8; i++)
 		{
