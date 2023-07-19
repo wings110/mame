@@ -582,7 +582,6 @@ midcoin/24cdjuke.cpp
 midcoin/wallc.cpp
 midcoin/wink.cpp
 midw8080/8080bw.cpp
-midw8080/m79amb.cpp
 midw8080/mw8080bw.cpp
 midw8080/rotaryf.cpp
 midway/astrocde.cpp
@@ -771,7 +770,6 @@ misc/jungleyo.cpp
 misc/kas89.cpp
 misc/kingpin.cpp
 misc/kurukuru.cpp
-misc/kyugo.cpp
 misc/ladyfrog.cpp
 misc/laserbas.cpp
 misc/laz_aftrshok.cpp
@@ -991,10 +989,10 @@ nichibutsu/armedf.cpp
 nichibutsu/cclimber.cpp
 nichibutsu/clshroad.cpp
 nichibutsu/cop01.cpp
-nichibutsu/csplayh5.cpp
 nichibutsu/dacholer.cpp
 nichibutsu/galivan.cpp
 nichibutsu/gomoku.cpp
+nichibutsu/hrdvd.cpp
 nichibutsu/hyhoo.cpp
 nichibutsu/jangou.cpp
 nichibutsu/magmax.cpp
@@ -1053,6 +1051,7 @@ omori/popper.cpp
 omori/spaceg.cpp
 orca/espial.cpp
 orca/funkybee.cpp
+orca/kyugo.cpp
 orca/marineb.cpp
 orca/vastar.cpp
 orca/zodiack.cpp
@@ -1316,7 +1315,6 @@ sigma/sigmab31.cpp
 sigma/sigmab52.cpp
 sigma/sigmab98.cpp
 sigma/spiders.cpp
-sigma/sub.cpp
 skeleton/elcirculo.cpp
 snk/bbusters.cpp
 snk/dmndrby.cpp

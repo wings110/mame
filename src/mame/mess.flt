@@ -48,12 +48,11 @@ apple/apple3.cpp
 apple/iphone2g.cpp
 apple/lisa.cpp
 apple/lwriter.cpp
-apple/mac.cpp
 apple/mac128.cpp
+apple/macii.cpp
 apple/maciivx.cpp
 apple/maclc.cpp
 apple/maclc3.cpp
-apple/macpci.cpp
 apple/macpdm.cpp
 apple/macprtb.cpp
 apple/macpwrbk030.cpp
@@ -309,8 +308,6 @@ handheld/scrablex.cpp
 handheld/talkingbb.cpp
 handheld/talkingfb.cpp
 handheld/teammate.cpp
-handheld/tispeak.cpp
-handheld/tispellb.cpp
 handheld/wildfire.cpp
 hds/hds200.cpp
 heathkit/et3400.cpp
@@ -416,6 +413,10 @@ intel/sdk80.cpp
 intel/sdk85.cpp
 intel/sdk86.cpp
 intergraph/interpro.cpp
+intergraph/interpro_arbga.cpp
+intergraph/interpro_ioga.cpp
+intergraph/interpro_mcga.cpp
+intergraph/interpro_sga.cpp
 interton/vc4000.cpp
 isc/compucolor.cpp
 kawai/acr20.cpp
@@ -441,10 +442,10 @@ korg/polysix.cpp
 kurzweil/krz2000.cpp
 kyber/kminus.cpp
 kyocera/kyocera.cpp
-leapfrog/leapfrog_iquest.cpp
-leapfrog/leapfrog_leappad.cpp
-leapfrog/leapfrog_leapster_explorer.cpp
+leapfrog/iquest.cpp
+leapfrog/leappad.cpp
 leapfrog/leapster.cpp
+leapfrog/leapster_explorer.cpp
 learsiegler/adm11.cpp
 learsiegler/adm23.cpp
 learsiegler/adm31.cpp
@@ -791,7 +792,6 @@ skeleton/alphasma3k.cpp
 skeleton/am1000.cpp
 skeleton/ampex.cpp
 skeleton/ampex210.cpp
-skeleton/anzterm.cpp
 skeleton/argox.cpp
 skeleton/attache.cpp
 skeleton/ax20.cpp
@@ -799,7 +799,6 @@ skeleton/basf7100.cpp
 skeleton/bert.cpp
 skeleton/bitgraph.cpp
 skeleton/blit.cpp
-skeleton/blw700i.cpp
 skeleton/bpmmicro.cpp
 skeleton/br8641.cpp
 skeleton/busicom.cpp
@@ -851,7 +850,6 @@ skeleton/fanucs15.cpp
 skeleton/fanucspmg.cpp
 skeleton/fc100.cpp
 skeleton/fk1.cpp
-skeleton/freedom120.cpp
 skeleton/fs3216.cpp
 skeleton/ft68m.cpp
 skeleton/gem_rp.cpp
@@ -890,7 +888,6 @@ skeleton/lft.cpp
 skeleton/lg-dvd.cpp
 skeleton/lilith.cpp
 skeleton/lms46.cpp
-skeleton/mccpm.cpp
 skeleton/mes.cpp
 skeleton/mfabfz.cpp
 skeleton/mice.cpp
@@ -1280,7 +1277,6 @@ yamaha/ympsr340.cpp
 yamaha/ympsr40.cpp
 yamaha/ympsr400.cpp
 yamaha/ympsr60.cpp
-yamaha/ympss12.cpp
 yamaha/ymqy70.cpp
 yamaha/ymrx15.cpp
 yamaha/ymsy35.cpp
