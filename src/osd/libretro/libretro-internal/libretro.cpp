@@ -20,8 +20,6 @@
 
 /* forward decls / externs / prototypes */
 
-extern const char bare_build_version[];
-
 int retro_pause    = 0;
 bool retro_load_ok = false;
 bool libretro_supports_bitmasks = false;

@@ -1066,8 +1066,13 @@ OLD_GIT_VERSION := $(shell cat $(GENDIR)/git_desc 2> /dev/null)
 else
 OLD_GIT_VERSION := $(shell cat $(GENDIR)/git_desc 2> NUL)
 endif
+
 ifneq ($(IGNORE_GIT),1)
-NEW_GIT_VERSION := $(shell git describe --always)
+ifeq ($(OSD), retro)
+NEW_GIT_VERSION := $(shell git rev-parse --short HEAD)
+else
+NEW_GIT_VERSION := $(shell git describe --dirty)
+endif # retro
 else
 NEW_GIT_VERSION := unknown
 endif
@@ -1387,7 +1392,7 @@ $(PROJECTDIR)/$(MAKETYPE)-osx-clang/Makefile: makefile $(SCRIPTS) $(GENIE)
 
 .PHONY: macosx_x64_clang
 macosx_x64_clang: generate $(PROJECTDIR)/$(MAKETYPE)-osx-clang/Makefile
-	$(MAKE) $(MAKEPARAMS) -C $(PROJECTDIR)/$(MAKETYPE)-osx-clang config=$(CONFIG)64 precompile
+	$(SILENT) $(MAKE) $(MAKEPARAMS) -C $(PROJECTDIR)/$(MAKETYPE)-osx-clang config=$(CONFIG)64 precompile
 	$(SILENT) $(MAKE) $(MAKEPARAMS) -C $(PROJECTDIR)/$(MAKETYPE)-osx-clang config=$(CONFIG)64
 
 .PHONY: macosx_arm64_clang
