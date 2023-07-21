@@ -70,7 +70,8 @@ char joystick_saturation[8];
 static bool arcade = false;
 static int FirstTimeUpdate = 1;
 int rotation_mode = 0;
-int rotation_allow = 0;
+int libretro_rotation_allow = 0;
+int internal_rotation_allow = 0;
 int thread_mode = 0;
 // rom file name and path
 char g_rom_dir[1024];
@@ -447,7 +448,6 @@ static int execute_game(char* path)
    {
       log_cb(RETRO_LOG_DEBUG, "System not found: %s\n", MsystemName);
 
-      // test system
       if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) != 0)
          arcade = false;
    }
@@ -484,21 +484,32 @@ static int execute_game(char* path)
          break;
    }
 
+   libretro_rotation_allow = 0;
+   internal_rotation_allow = 0;
+
    if (rotation_mode == 2 && environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
    {
-      rotation_allow = 1;
+      /* Allow libretro rotation */
+      libretro_rotation_allow = 1;
       Add_Option((char*)"-norotate");
       norotate = true;
    }
-   else if (rotation_mode == 1 || rotation_mode == 2)
+   else if (rotation_mode == 1)
    {
-      rotation_allow = 0;
+      /* Allow internal rotation */
+      internal_rotation_allow = 1;
    }
-   else if (rotation_mode == 0)
+   else
    {
-      rotation_allow = 0;
       Add_Option((char*)"-norotate");
       norotate = true;
+
+      /* Hack for none rotation mode to allow aspect flip,
+       * since libretro rotation disabled in frontend
+       * does not behave the same as rotation disabled
+       * for some reason.. */
+      if (rotation_mode == 0)
+         internal_rotation_allow = 1;
    }
 
    if (norotate)

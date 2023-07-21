@@ -456,8 +456,15 @@ static void check_variables(void)
          {
             fb_width      = width;
             fb_height     = height;
-            retro_aspect  = (float)fb_width / (float)fb_height;
             video_changed = 2;
+
+            /* Must use SET_SYSTEM_AV_INFO when max is not enough */
+            if (fb_width > max_width || fb_height > max_height)
+            {
+               max_width     = fb_width;
+               max_height    = fb_height;
+               video_changed = 1;
+            }
          }
       }
    }

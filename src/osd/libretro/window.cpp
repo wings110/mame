@@ -38,6 +38,9 @@
 
 extern int max_width;
 extern int max_height;
+extern int libretro_rotation_allow;
+extern int internal_rotation_allow;
+extern int norotate;
 extern bool retro_load_ok;
 
 //============================================================
@@ -279,10 +282,10 @@ int retro_window_info::window_init()
 		if (target()->orientation() & ORIENTATION_SWAP_XY)
 		    retro_aspect = 1.0 / retro_aspect;
 
-		int tempwidth, tempheight;
-		target()->compute_minimum_size(tempwidth, tempheight);
-		fb_width  = tempwidth;
-		fb_height = tempheight;
+		int temp_width, temp_height;
+		target()->compute_minimum_size(temp_width, temp_height);
+		fb_width  = temp_width;
+		fb_height = temp_height;
 
 		video_changed = 2;
 	}
@@ -365,53 +368,46 @@ void retro_window_info::update()
 	// if we're visible and running and not in the middle of a resize, draw
 	if (target() != nullptr)
 	{
-		int tempwidth, tempheight;
+		int temp_width, temp_height;
 		float eff_aspect = view_aspect;
 
 		eff_aspect = target()->current_view().effective_aspect();
 		if (target()->orientation() & ORIENTATION_SWAP_XY)
 			eff_aspect = 1.0f / eff_aspect;
 
-		// see if the games video mode has changed
-		target()->compute_minimum_size(tempwidth, tempheight);
-		if (tempwidth != fb_width || tempheight != fb_height || eff_aspect != view_aspect)
+		target()->compute_minimum_size(temp_width, temp_height);
+		if (alternate_renderer)
 		{
-			m_minimum_dim = osd_dim(tempwidth, tempheight);
+			temp_width  = fb_width;
+			temp_height = fb_height;
+			target()->set_keepaspect(false);
+		}
+
+		if (temp_width != fb_width || temp_height != fb_height || eff_aspect != view_aspect)
+		{
+			m_minimum_dim = osd_dim(temp_width, temp_height);
 			view_aspect   = eff_aspect;
 
 			if (!alternate_renderer)
 			{
-				fb_width  = tempwidth;
-				fb_height = tempheight;
+				fb_width  = temp_width;
+				fb_height = temp_height;
 
 				/* Flip internal resolution for internal rotation */
-				if (target()->orientation() & ORIENTATION_SWAP_XY && !rotation_allow)
-					monitor()->update_resolution(tempheight, tempwidth);
+				if ((!libretro_rotation_allow && internal_rotation_allow)
+						&& target()->orientation() & ORIENTATION_SWAP_XY)
+					monitor()->update_resolution(temp_height, temp_width);
 				else
-					monitor()->update_resolution(tempwidth, tempheight);
-
-				monitor()->refresh();
-				video_changed = 2;
+					monitor()->update_resolution(temp_width, temp_height);
 			}
-			else
-			{
-				float temp_aspect = view_aspect;
-				if (rotation_allow
-						&& (machine().system().flags & ORIENTATION_SWAP_XY))
-					temp_aspect = 1.0f / temp_aspect;
 
-				if (temp_aspect != retro_aspect)
-				{
-				    target()->set_keepaspect(false);
-				    monitor()->refresh();
-					video_changed = 2;
-				}
-			}
+			monitor()->refresh();
+			video_changed = 2;
 
 			if (video_changed)
 			{
 				retro_aspect = view_aspect;
-				if (rotation_allow
+				if (((libretro_rotation_allow) || (!libretro_rotation_allow && !internal_rotation_allow))
 						&& (machine().system().flags & ORIENTATION_SWAP_XY))
 					retro_aspect = 1.0f / retro_aspect;
 
@@ -429,7 +425,7 @@ void retro_window_info::update()
 					if (fb_width < max_width || fb_height < max_height)
 					{
 						/* Don't shrink below 640x480 */
-						if (fb_width >= 640 && fb_height >= 480)
+						if (fb_width > 640 && fb_height > 480)
 						{
 							max_width     = fb_width;
 							max_height    = fb_height;

@@ -10,8 +10,6 @@
 extern float sound_timer;
 extern float retro_fps;
 extern int video_changed;
-extern int rotation_allow;
-
 
 //============================================================
 //  Defines
