@@ -423,14 +423,18 @@ void retro_window_info::update()
 					video_changed = 1;
 				}
 
-				/* Shrink geometry to native in native resolution renderer */
+				/* Shrink maximum geometry in native resolution renderer */
 				if (!alternate_renderer)
 				{
 					if (fb_width < max_width || fb_height < max_height)
 					{
-						max_width     = fb_width;
-						max_height    = fb_height;
-						video_changed = 1;
+						/* Don't shrink below 640x480 */
+						if (fb_width >= 640 && fb_height >= 480)
+						{
+							max_width     = fb_width;
+							max_height    = fb_height;
+							video_changed = 1;
+						}
 					}
 				}
 
