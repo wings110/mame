@@ -85,7 +85,7 @@ static char gameName[1024];
 // args for cores
 static char XARGV[64][1024];
 static const char* xargv_cmd[64];
-int PARAMCOUNT=0;
+int PARAMCOUNT = 0;
 
 // path configuration
 #define NB_OPTPATH 13
@@ -316,11 +316,81 @@ static void Add_Option(const char* option)
    sprintf(XARGV[PARAMCOUNT++], "%s", option);
 }
 
+static void Set_Rotation_Option(int gameRot)
+{
+   int screenRot = 0;
+   bool norotate = false;
+
+   /* Force internal rotation when booting to osd */
+   if (boot_to_osd_enable)
+      rotation_mode = 1;
+
+   switch (gameRot)
+   {
+      case 7: /* All flags (shtrider) */
+      case 4: /* Only ORIENTATION_SWAP_XY (ladyfrog, kick) */
+         screenRot = 3;
+         gameRot  -= ROT270;
+         break;
+      case ROT90: /* 5: ORIENTATION_SWAP_XY | ORIENTATION_FLIP_X */
+         screenRot = 3;
+         gameRot   = 0;
+         break;
+      case ROT180: /* 3: ORIENTATION_FLIP_X | ORIENTATION_FLIP_Y */
+         screenRot = 2;
+         gameRot   = 0;
+         break;
+      case ROT270: /* 6: ORIENTATION_SWAP_XY | ORIENTATION_FLIP_Y */
+         screenRot = 1;
+         gameRot   = 0;
+         break;
+      case ROT0:
+      default:
+         break;
+   }
+
+   libretro_rotation_allow = 0;
+   internal_rotation_allow = 0;
+
+   if (rotation_mode == 2 && environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
+   {
+      /* Allow libretro rotation */
+      libretro_rotation_allow = 1;
+      Add_Option((char*)"-norotate");
+      norotate = true;
+   }
+   else if (rotation_mode == 1)
+   {
+      /* Allow internal rotation */
+      internal_rotation_allow = 1;
+   }
+   else
+   {
+      Add_Option((char*)"-norotate");
+      norotate = true;
+
+      /* Hack for none rotation mode to allow aspect flip,
+       * since libretro rotation disabled in frontend
+       * does not behave the same as rotation disabled
+       * for some reason.. */
+      if (rotation_mode == 0)
+         internal_rotation_allow = 1;
+   }
+
+   if (norotate)
+   {
+      if (gameRot & ORIENTATION_FLIP_X)
+         Add_Option((char*)"-flipx");
+      else if (gameRot & ORIENTATION_FLIP_Y)
+         Add_Option((char*)"-flipy");
+   }
+}
+
 static void Set_Default_Option(void)
 {
    /* some hardcoded default options. */
 
-   PARAMCOUNT=0;
+   PARAMCOUNT = 0;
    Add_Option(core);
 
    Add_Option("-joystick");
@@ -383,32 +453,50 @@ static void Set_Path_Option(void)
    int i;
    char tmp_dir[2048];
 
-   /*Setup path option according to retro (save/system) directory,
+   if (mame_paths_enable)
+      return;
+
+   /* Setup path option according to retro (save/system) directory,
     * or current if NULL. */
 
-   for(i = 0; i < NB_OPTPATH; i++)
+   for (i = 0; i < NB_OPTPATH; i++)
    {
       Add_Option((char*)(opt_name[i]));
 
-      if(opt_type[i] == 0)
+      if (opt_type[i] == 0)
       {
          if (retro_save_directory)
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_save_directory, slash, core, slash,dir_name[i]);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_save_directory, slash, core, slash, dir_name[i]);
          else
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash,dir_name[i],slash);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash, dir_name[i], slash);
       }
       else
       {
-         if(retro_system_directory)
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_system_directory, slash, core, slash,dir_name[i]);
+         if (retro_system_directory)
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_system_directory, slash, core, slash, dir_name[i]);
          else
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash,dir_name[i],slash);
+            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash, dir_name[i], slash);
       }
 
       Add_Option((char*)(tmp_dir));
    }
 
+   if (boot_to_osd_enable)
+      return;
+
+   Add_Option((char*)"-rompath");
+
+   if (retro_system_directory)
+      snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s%c%s%c%s;%s%c%s%c%s",
+            g_rom_dir,
+            retro_system_directory, slash, core, slash, "bios",
+            retro_system_directory, slash, core, slash, "roms");
+   else
+      snprintf(tmp_dir, sizeof(tmp_dir), "%s", g_rom_dir);
+
+   Add_Option((char*)(tmp_dir));
 }
+
 
 //============================================================
 //  main
@@ -418,11 +506,8 @@ static int execute_game(char* path)
 {
    unsigned i;
    char tmp_dir[2048];
-   int gameRot = 0;
-   int screenRot = 0;
-   int driverIndex;
-   bool norotate = false;
-
+   int gameRot     = 0;
+   int driverIndex = 0;
    FirstTimeUpdate = 1;
 
    for (i = 0; i < 64; i++)
@@ -456,83 +541,11 @@ static int execute_game(char* path)
    log_cb(RETRO_LOG_DEBUG, "Softlists: %d\n", softlist_enable);
 
    Set_Default_Option();
-
-   if (!mame_paths_enable)
-      Set_Path_Option();
-
-   switch (gameRot)
-   {
-      case 7: /* All flags (shtrider) */
-      case 4: /* Only ORIENTATION_SWAP_XY (ladyfrog, kick) */
-         screenRot = 3;
-         gameRot  -= ROT270;
-         break;
-      case ROT90: /* 5: ORIENTATION_SWAP_XY | ORIENTATION_FLIP_X */
-         screenRot = 3;
-         gameRot   = 0;
-         break;
-      case ROT180: /* 3: ORIENTATION_FLIP_X | ORIENTATION_FLIP_Y */
-         screenRot = 2;
-         gameRot   = 0;
-         break;
-      case ROT270: /* 6: ORIENTATION_SWAP_XY | ORIENTATION_FLIP_Y */
-         screenRot = 1;
-         gameRot   = 0;
-         break;
-      case ROT0:
-      default:
-         break;
-   }
-
-   libretro_rotation_allow = 0;
-   internal_rotation_allow = 0;
-
-   if (rotation_mode == 2 && environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
-   {
-      /* Allow libretro rotation */
-      libretro_rotation_allow = 1;
-      Add_Option((char*)"-norotate");
-      norotate = true;
-   }
-   else if (rotation_mode == 1)
-   {
-      /* Allow internal rotation */
-      internal_rotation_allow = 1;
-   }
-   else
-   {
-      Add_Option((char*)"-norotate");
-      norotate = true;
-
-      /* Hack for none rotation mode to allow aspect flip,
-       * since libretro rotation disabled in frontend
-       * does not behave the same as rotation disabled
-       * for some reason.. */
-      if (rotation_mode == 0)
-         internal_rotation_allow = 1;
-   }
-
-   if (norotate)
-   {
-      if (gameRot & ORIENTATION_FLIP_X)
-         Add_Option((char*)"-flipx");
-      else if (gameRot & ORIENTATION_FLIP_Y)
-         Add_Option((char*)"-flipy");
-   }
-
-   Add_Option((char*)("-rompath"));
+   Set_Rotation_Option(gameRot);
+   Set_Path_Option();
 
    if (!boot_to_osd_enable)
    {
-      if (retro_system_directory)
-         snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s%c%s%c%s;%s%c%s%c%s",
-               MgamePath,
-               retro_system_directory, slash, core, slash, "bios",
-               retro_system_directory, slash, core, slash, "roms");
-      else
-         snprintf(tmp_dir, sizeof(tmp_dir), "%s", MgamePath);
-      Add_Option((char*)(tmp_dir));
-
       if (softlist_enable)
       {
          if (!arcade)
@@ -562,6 +575,7 @@ static int execute_game(char* path)
    }
    else
    {
+      Add_Option((char*)("-rompath"));
       snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s", MgamePath, MparentPath);
       Add_Option((char*)(tmp_dir));
    }
@@ -652,15 +666,13 @@ static int execute_game_cmd(char* path)
    if (!Only1Arg)
       CreateConf = (!strcmp(ARGUV[1],"-cc") || !strcmp(ARGUV[1],"-createconfig")) ? 1 : 0;
 
-   log_cb(RETRO_LOG_INFO, "ARGUV[0]=%s\n", ARGUV[0]);
-
    FirstTimeUpdate = 1;
 
    for (i = 0; i < 64; i++)
       xargv_cmd[i] = NULL;
 
    /* split the path to directory and the name without the zip extension */
-   if (parsePath(Only1Arg?path:ARGUV[ARGUC-1], MgamePath, MgameName) == 0)
+   if (parsePath(Only1Arg ? path : ARGUV[ARGUC-1], MgamePath, MgameName) == 0)
    {
       log_cb(RETRO_LOG_ERROR, "parse path failed! path=\"%s\"\n", path);
       strcpy(MgameName, path);
@@ -669,7 +681,7 @@ static int execute_game_cmd(char* path)
    if (Only1Arg)
    {
       /* split the path to directory and the name without the zip extension */
-      if (parseSystemName(path, MsystemName) ==0)
+      if (parseSystemName(path, MsystemName) == 0)
       {
          log_cb(RETRO_LOG_ERROR, "parse systemname failed! path=\"%s\"\n", path);
          strcpy(MsystemName, path);
@@ -677,7 +689,7 @@ static int execute_game_cmd(char* path)
    }
 
    /* Find the game info. Exit if game driver was not found. */
-   if (getGameInfo(Only1Arg?MgameName:ARGUV[0], &gameRot, &driverIndex, &arcade) == 0)
+   if (getGameInfo(Only1Arg ? MgameName : ARGUV[0], &gameRot, &driverIndex, &arcade) == 0)
    {
       /* handle -cc/-createconfig case */
       if (CreateConf)
@@ -723,21 +735,16 @@ static int execute_game_cmd(char* path)
    }
 
    Set_Default_Option();
-
-   Add_Option("-mouse");
-   Add_Option("-multimouse");
-
+   Set_Rotation_Option(gameRot);
    Set_Path_Option();
 
    if (Only1Arg)
    {
-      /* Assume arcade/mess rom with full path or -cc   */
+      /* Assume arcade/mess rom with full path or -cc */
       if (CreateConf)
          Add_Option((char*)"-createconfig");
       else
       {
-         Add_Option((char*)"-rp");
-         Add_Option((char*)g_rom_dir);
          log_cb(RETRO_LOG_DEBUG, "System: %s, game: %s\n", MsystemName, MgameName);
 
          int num = driver_list::find(MsystemName);
@@ -795,7 +802,6 @@ int mmain2(int argc, const char *argv)
    unsigned i = 0;
    int result = 0;
    osd_options options;
-   //cli_options MRoptions;
 
    strcpy(gameName, argv);
 
@@ -816,7 +822,7 @@ int mmain2(int argc, const char *argv)
    if (experimental_cmdline)
    {
       parse_cmdline(argv);
-      log_cb(RETRO_LOG_INFO, "Starting game from command line: \"%s\"\n",gameName);
+      log_cb(RETRO_LOG_INFO, "Starting game from command line: \"%s\"\n", gameName);
       result = execute_game_cmd(ARGUV[ARGUC-1]);
    }
    else
@@ -829,27 +835,11 @@ int mmain2(int argc, const char *argv)
       return result;
 
    log_cb(RETRO_LOG_DEBUG, "Parameters:\n");
-   char parameter_output[255];
 
    for (i = 0; i < PARAMCOUNT; i++)
    {
-      const char* nextarg = (XARGV[i+1][0]) ? XARGV[i+1] : NULL;
-
       xargv_cmd[i] = (char*)(XARGV[i]);
-
-      if (i > 0 && XARGV[i][0] != '-' && nextarg)
-      {
-         strcat(parameter_output, " ");
-         strcat(parameter_output, XARGV[i]);
-         nextarg = NULL;
-      }
-      else
-         strcpy(parameter_output, XARGV[i]);
-
-      if (nextarg && nextarg[0] != '-')
-         continue;
-
-      log_cb(RETRO_LOG_DEBUG, "  %s\n", parameter_output);
+      log_cb(RETRO_LOG_DEBUG, "  %s\n", XARGV[i]);
    }
 
    // launch mmain from retromain
