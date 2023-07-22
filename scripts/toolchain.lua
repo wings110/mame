@@ -650,16 +650,15 @@ function toolchain(_buildDir, _subDir)
 
 		-- Set TARGETOS based on LIBRETRO_OS if we know
 		if LIBRETRO_OS~=nil then
-			-- most things are "linux" (ish).
 			local targetos = "linux"
-			if LIBRETRO_OS=="osx" or LIBRETRO_OS=="osx-arm64" then
+			if LIBRETRO_OS=="osx" or LIBRETRO_OS=="osx-arm64" or LIBRETRO_OS=="ios-arm64" or LIBRETRO_OS=="tvos-arm64"  then
 				targetos = "macosx"
 			elseif LIBRETRO_OS:sub(1, 4)=="armv" then
 				targetos = "android"
 			elseif LIBRETRO_OS=="ios" then
 				targetos = "ios"
 			elseif LIBRETRO_OS=="win" then
-				targetos = "win"
+				targetos = "windows"
 			end
 			_OPTIONS["targetos"] = targetos
 		end
@@ -672,7 +671,7 @@ function toolchain(_buildDir, _subDir)
 		end
 
 		-- MS and Apple don't need -fPIC, but pretty much everything else does.
-		if _OPTIONS["targetos"] ~= "win" and _OPTIONS["targetos"] ~= "macosx" then
+		if _OPTIONS["targetos"] ~= "windows" and _OPTIONS["targetos"] ~= "macosx" then
 			buildoptions { "-fPIC" }
 			linkoptions { "-fPIC" }
 		end
