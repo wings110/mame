@@ -75,6 +75,7 @@ stages:
 # Need to set a proper key in each job
 cache: &global_cache
   untracked: true
+  key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
   paths:
     - build/
 
@@ -90,7 +91,6 @@ libretro-build-windows-x64:
     - .core-defs
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-windows-x64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -102,7 +102,6 @@ libretro-build-windows-i686:
     - .core-defs
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-windows-i686"
   only:
     - master
     - /^libretro/mame.*$/
@@ -114,7 +113,6 @@ libretro-build-linux-x64:
     - .core-defs
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-linux-x64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -126,7 +124,6 @@ libretro-build-linux-i686:
     - .core-defs
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-linux-i686"
   only:
     - master
     - /^libretro/mame.*$/
@@ -140,9 +137,9 @@ libretro-build-osx-x64:
     - .core-defs
   variables:
     MACOSX_DEPLOYMENT_TARGET: "10.14"
+  cache: []
 #  cache:
 #    <<: *global_cache
-#    key: "$CI_COMMIT_REF_SLUG-osx-x64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -156,9 +153,9 @@ libretro-build-osx-arm64:
     - .core-defs
   variables:
     MACOSX_DEPLOYMENT_TARGET: "10.14"
+  cache: []
 #  cache:
 #    <<: *global_cache
-#    key: "$CI_COMMIT_REF_SLUG-osx-arm64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -175,7 +172,6 @@ android-armeabi-v7a:
     CORENAME:  mamearcade
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-android-armeabi-v7a"
   only:
     - master
     - /^libretro/mame.*$/
@@ -191,7 +187,6 @@ android-arm64-v8a:
     CORENAME:  mamearcade
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-android-arm64-v8a"
   only:
     - master
     - /^libretro/mame.*$/
@@ -207,7 +202,6 @@ android-arm64-v8a-mess:
     CORENAME:  mamemess
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-android-arm64-v8a-mess"
   only:
     - master
     - /^libretro/mame.*$/
@@ -223,7 +217,6 @@ android-x86_64:
     CORENAME:  mamearcade
   cache:
     <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-android-x86_64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -241,9 +234,9 @@ libretro-build-ios-arm64:
   extends:
     - .libretro-ios-arm64-make-default
     - .core-defs
+  cache: []
 #  cache:
 #    <<: *global_cache
-#    key: "$CI_COMMIT_REF_SLUG-ios-arm64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -255,9 +248,9 @@ libretro-build-tvos-arm64:
   extends:
     - .libretro-tvos-arm64-make-default
     - .core-defs
+  cache: []
 #  cache:
 #    <<: *global_cache
-#    key: "$CI_COMMIT_REF_SLUG-tvos-arm64"
   only:
     - master
     - /^libretro/mame.*$/
