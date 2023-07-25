@@ -17,6 +17,7 @@ DEBUG ?= 0
 export LIBRETRO_OS
 #this make file need dont better ad use vars instead of the way it done again can wait till the mac builds work
 export ARCHOPTS
+export ARCH
 ###########################################################################
 #
 #   LIBRETRO PLATFORM GUESSING
@@ -27,6 +28,12 @@ export ARCHOPTS
 
 UNAME_S = $(shell uname -s)
 UNAME_M = $(shell uname -m)
+ifeq ($(platform),)
+$(error platform not set)
+else
+$(info platform=$(platform))
+$(info Defaults cc=$(cc) CC=$(CC) CFLAGS=$(CFLAGS) CCFLAGS=$(CCFLAGS) CXXFLAGS=$(CXXFLAGS) LDFLAGS=$(LDFLAGS) ARCH=$(ARCH) arch=$(arch) NUMPROC=$(NUMPROC))
+endif
 
 ifeq ($(platform),)
 	platform = unix
@@ -46,7 +53,15 @@ ifeq ($(platform),)
 endif
 ifeq ($(ARCH),)
 	LIBRETRO_CPU = $(ARCH)
+	#GENIE makefiles use this variable fr something else unset if set
+	ifeq ($(ARCH),x86)
+		PTR64 := 0
+	endif
+	ARCH:=
+$(info unsetting ARCH=$(ARCH))
 endif
+
+
 ifeq ($(LIBRETRO_CPU),)
 	ifeq ($(UNAME_M),)
 		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
@@ -62,9 +77,6 @@ ifeq ($(LIBRETRO_CPU),)
 	endif
 endif
 
-ifeq ($(ARCH),x86)
-	PTR64 := 0
-endif
 
 
 ###########################################################################
@@ -127,7 +139,6 @@ ifeq ($(platform),android-arm)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-arm
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -139,7 +150,6 @@ ifeq ($(platform),android-arm64)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-arm64
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -151,7 +161,6 @@ ifeq ($(platform),android-x86)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-x86
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -163,7 +172,6 @@ ifeq ($(platform),android-x86_64)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-x64
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -183,10 +191,10 @@ endif
 
 ifeq ($(platform),osx)
 	PLATFLAGS += DONT_USE_NETWORK=1
-	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#PLATFLAGS +=OVERRIDE_CC=clang OVERRIDE_CXX=clang++
 	PLATFLAGS +=TARGETOS="macosx"
 	ifeq ($(CROSS_COMPILE),1)
+		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts)
 		#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.		LIBRETRO_CPU = arm64
 		LIBRETRO_OS = macosx
@@ -200,7 +208,10 @@ ifeq ($(platform),osx)
 	else
 #		LIBRETRO_OS = macosx
 #		LIBRETRO_CPU =x86_64
-		export ARCHITECTURE=_x64_clang
+		#not set on x64 use the info from arm64 so we get the right target and path
+		LIBRETRO_APPLE_PLATFORM=x86_64-apple-macos10.15
+		LIBRETRO_APPLE_ISYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		PLATFLAGS +=PLATFORM=x64
 		#we dont need to pass -arch as i fixed the condition and there and arm is added from upstream in the last pull req.
 		#There is no variable in the lua scrip to disable it the other platfrom will follow suit and just use PLATFORM when we are up and running.
@@ -210,7 +221,7 @@ endif
 
 ifeq ($(platform),ios-arm64)
 	LIBRETRO_APPLE_PLATFORM = arm64-apple-ios14.2
-	LIBRETRO_APPLE_ISYSROOT :=  #$(shell xcodebuild -version -sdk iphoneos Path)
+	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk iphoneos Path)
 	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#the ci should set above only osx does it so far unset if its added to the ci
 	#-isysroot $(LIBRETRO_APPLE_ISYSROOT)
@@ -263,7 +274,7 @@ ifeq ($(platform),tvos-arm64)
 endif
 
 ifneq ($(LIBRETRO_CPU),)
-	PLATFLAGS += ARCH="" LIBRETRO_CPU="$(LIBRETRO_CPU)"
+	PLATFLAGS += LIBRETRO_CPU="$(LIBRETRO_CPU)"
 endif
 ifneq ($(FORCE_DRC_C_BACKEND),)
 	PLATFLAGS += FORCE_DRC_C_BACKEND="$(FORCE_DRC_C_BACKEND)"
