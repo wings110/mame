@@ -28,12 +28,6 @@ export ARCH
 
 UNAME_S = $(shell uname -s)
 UNAME_M = $(shell uname -m)
-ifeq ($(platform),)
-$(error platform not set)
-else
-$(info platform=$(platform))
-$(info Defaults cc=$(cc) CC=$(CC) CFLAGS=$(CFLAGS) CCFLAGS=$(CCFLAGS) CXXFLAGS=$(CXXFLAGS) LDFLAGS=$(LDFLAGS) ARCH=$(ARCH) arch=$(arch) NUMPROC=$(NUMPROC))
-endif
 
 ifeq ($(platform),)
 	platform = unix
@@ -57,10 +51,16 @@ ifeq ($(ARCH),)
 	ifeq ($(ARCH),x86)
 		PTR64 := 0
 	endif
-	ARCH:=
+	ARCH :=
 $(info unsetting ARCH=$(ARCH))
 endif
 
+ifeq ($(platform),)
+$(error platform not set)
+else
+$(info platform=$(platform))
+$(info Defaults cc=$(cc) CC=$(CC) CFLAGS=$(CFLAGS) CCFLAGS=$(CCFLAGS) CXXFLAGS=$(CXXFLAGS) LDFLAGS=$(LDFLAGS) ARCH=$(ARCH) arch=$(arch) NUMPROC=$(NUMPROC))
+endif
 
 ifeq ($(LIBRETRO_CPU),)
 	ifeq ($(UNAME_M),)
@@ -109,11 +109,11 @@ ifneq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
 		PLATFLAGS += MINGW64="$(MINGW64)"
-		LIBRETRO_CPU="x86_64"
+		LIBRETRO_CPU = x86_64
 	else ifeq ($(MSYSTEM),MINGW32)
 		MINGW32 ?= /mingw32
 		PLATFLAGS += MINGW32="$(MINGW32)"
-		LIBRETRO_CPU="x86"
+		LIBRETRO_CPU = x86
 		PTR64=0
 	endif
 	CC  ?= cc
@@ -198,7 +198,7 @@ ifeq ($(platform),osx)
 		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts)
 		#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.		LIBRETRO_CPU = arm64
 		LIBRETRO_OS = macosx
-		LIBRETRO_CPU =arm64
+		LIBRETRO_CPU = arm64
 		PLATFLAGS +=LIBRETRO_OSX_ARM64=1
 		PLATFLAGS +=PLATFORM=arm64
 		#this will be removed like x64 platfrom after the builds are working
@@ -237,8 +237,8 @@ ifeq ($(platform),ios-arm64)
 	PLATFLAGS +=LIBRETRO_IOS=1
 	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts)
 	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
-	LIBRETRO_CPU =arm64
-	LIBRETRO_OS =ios-arm64
+	LIBRETRO_CPU = arm64
+	LIBRETRO_OS = ios-arm64
 	PLATFLAGS +=LIBRETRO_IOS=1
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
 	PLATFLAGS +=TARGETOS="macosx"
