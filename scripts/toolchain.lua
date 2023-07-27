@@ -504,7 +504,6 @@ function toolchain(_buildDir, _subDir)
 			"-ffunction-sections",
 			"-funwind-tables",
 			"-fstack-protector-strong",
-			"-fsigned-char",
 			"-no-canonical-prefixes",
 			"-Wunused-value",
 			"-Wundef",
@@ -526,6 +525,7 @@ function toolchain(_buildDir, _subDir)
 	configuration { "android-arm" }
 			buildoptions {
 				"--target=armv7-none-linux-android" .. androidApiLevel,
+				"-fsigned-char",
 				"-march=armv7-a",
 				"-mfloat-abi=softfp",
 				"-mfpu=neon",
