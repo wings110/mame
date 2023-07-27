@@ -489,6 +489,9 @@ function toolchain(_buildDir, _subDir)
 			"m",
 			"android",
 			"log",
+			"c++_static",
+			"c++abi",
+			"stdc++",
 		}
 		buildoptions_c {
 			"--gcc-toolchain=" .. androidToolchainRoot(),
@@ -501,6 +504,7 @@ function toolchain(_buildDir, _subDir)
 			"-ffunction-sections",
 			"-funwind-tables",
 			"-fstack-protector-strong",
+			"-fsigned-char",
 			"-no-canonical-prefixes",
 			"-Wunused-value",
 			"-Wundef",
@@ -527,6 +531,11 @@ function toolchain(_buildDir, _subDir)
 				"-mfpu=neon",
 				"-mthumb",
 			}
+			links {
+				"android_support",
+				"unwind",
+				"gcc",
+			}
 			linkoptions {
 				"--target=armv7-none-linux-android" .. androidApiLevel,
 				"-march=armv7-a",
@@ -535,9 +544,11 @@ function toolchain(_buildDir, _subDir)
 	configuration { "android-arm64" }
 			buildoptions {
 				"--target=aarch64-none-linux-android" .. androidApiLevel,
+				"-march=armv8-a",
 			}
 			linkoptions {
 				"--target=aarch64-none-linux-android" .. androidApiLevel,
+				"-march=armv8-a",
 			}
 
 	configuration { "android-x86" }
