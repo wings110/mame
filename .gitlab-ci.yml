@@ -137,9 +137,8 @@ libretro-build-osx-x64:
     - .core-defs
   variables:
     MACOSX_DEPLOYMENT_TARGET: "10.14"
-  cache: []
-#  cache:
-#    <<: *global_cache
+  cache:
+    <<: *global_cache
   only:
     - master
     - /^libretro/mame.*$/
@@ -153,9 +152,8 @@ libretro-build-osx-arm64:
     - .core-defs
   variables:
     MACOSX_DEPLOYMENT_TARGET: "10.14"
-  cache: []
-#  cache:
-#    <<: *global_cache
+  cache:
+    <<: *global_cache
   only:
     - master
     - /^libretro/mame.*$/
@@ -234,9 +232,8 @@ libretro-build-ios-arm64:
   extends:
     - .libretro-ios-arm64-make-default
     - .core-defs
-  cache: []
-#  cache:
-#    <<: *global_cache
+  cache:
+    <<: *global_cache
   only:
     - master
     - /^libretro/mame.*$/
@@ -248,9 +245,8 @@ libretro-build-tvos-arm64:
   extends:
     - .libretro-tvos-arm64-make-default
     - .core-defs
-  cache: []
-#  cache:
-#    <<: *global_cache
+  cache:
+    <<: *global_cache
   only:
     - master
     - /^libretro/mame.*$/
