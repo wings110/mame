@@ -980,7 +980,7 @@ TIMER_CALLBACK_MEMBER(screen_device::scanline_tick)
 void screen_device::configure(int width, int height, const rectangle &visarea, attoseconds_t frame_period)
 {
 #ifdef __LIBRETRO__
-	if (screen_configured
+	if (screen_configured > 10
 			&& width == m_width
 			&& height == m_height
 			&& floorf(ATTOSECONDS_TO_HZ(frame_period)) == floorf(ATTOSECONDS_TO_HZ(m_frame_period)))
