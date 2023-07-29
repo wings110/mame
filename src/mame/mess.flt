@@ -500,7 +500,6 @@ mizar/mzr8105.cpp
 morrow/microdec.cpp
 morrow/mpz80.cpp
 morrow/tricep.cpp
-mos/kim1.cpp
 motorola/ampscarp.cpp
 motorola/exorciser.cpp
 motorola/exorterm.cpp
