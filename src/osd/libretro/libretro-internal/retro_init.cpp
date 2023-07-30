@@ -31,9 +31,11 @@
 #define INT8 int8_t
 
 #ifdef _WIN32
-char slash = '\\';
+const char slash      = '\\';
+const char *slash_str = "\\";
 #else
-char slash = '/';
+const char slash      = '/';
+const char *slash_str = "/";
 #endif
 
 /* Args for experimental_commandline */
@@ -133,9 +135,10 @@ static int parsePath(char* path, char* gamePath, char* gameName)
          if (path[i] == '.')
             dotIndex = i;
    }
-   if (slashIndex < 0 && dotIndex >0){
+   if (slashIndex < 0 && dotIndex > 0)
+   {
         strcpy(gamePath, ".\0");
-        strncpy(gameName, path , dotIndex );
+        strncpy(gameName, path, dotIndex);
         gameName[dotIndex] = 0;
         return 1;
    }
@@ -214,9 +217,10 @@ static int parseParentPath(char* path, char* parentPath)
 static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *arcade)
 {
    int gameFound = 0;
-   int num = driver_list::find(gameName);
+   int num       = driver_list::find(gameName);
 
    log_cb(RETRO_LOG_DEBUG, "Searching for driver: %s\n", gameName);
+   *driverIndex  = num;
 
    if (num != -1)
    {
@@ -520,16 +524,10 @@ static void Set_Path_Option(void)
 
 static int execute_game(char* path)
 {
-   unsigned i;
    char tmp_dir[2048];
    int gameRot     = 0;
    int driverIndex = 0;
    FirstTimeUpdate = 1;
-
-   for (i = 0; i < 64; i++)
-      xargv_cmd[i] = NULL;
-
-   Extract_AllPath(path);
 
    /* Find if the driver exists for MgameName.
     * If not, check if a driver exists for MsystemName.
@@ -538,17 +536,13 @@ static int execute_game(char* path)
    {
       log_cb(RETRO_LOG_ERROR, "Driver not found: %s\n", MgameName);
       if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) == 0)
-      {
          log_cb(RETRO_LOG_ERROR, "System not found: %s\n", MsystemName);
-         return -2;
-      }
    }
 
    /* Handle case where Arcade game exists and game on a System also. */
    if (arcade == true)
    {
       log_cb(RETRO_LOG_DEBUG, "System not found: %s\n", MsystemName);
-
       if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) != 0)
          arcade = false;
    }
@@ -566,16 +560,19 @@ static int execute_game(char* path)
       {
          if (!arcade)
          {
-            Add_Option(MsystemName);
+            /* Must have valid system name for adding it */
+            if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade))
+               Add_Option(MsystemName);
+
             if (!boot_to_bios_enable)
             {
                if (!softlist_auto)
                   Add_Option((char*)mediaType);
-               Add_Option((char*)MgameName);
+               Add_Option(MgameName);
             }
          }
          else
-            Add_Option((char*)MgameName);
+            Add_Option(MgameName);
       }
       else
       {
@@ -684,9 +681,6 @@ static int execute_game_cmd(char* path)
 
    FirstTimeUpdate = 1;
 
-   for (i = 0; i < 64; i++)
-      xargv_cmd[i] = NULL;
-
    /* split the path to directory and the name without the zip extension */
    if (parsePath(Only1Arg ? path : ARGUV[ARGUC-1], MgamePath, MgameName) == 0)
    {
@@ -770,16 +764,30 @@ static int execute_game_cmd(char* path)
          Add_Option(MgameName);
       }
    }
-   else if (Mamecmdopt)
-   {
-      for (i = 1; i < ARGUC; i++)
-         Add_Option(ARGUV[i]);
-   }
    else
    {
-      /* Pass all cmdline args */
-      for (i = 0; i < ARGUC; i++)
-         Add_Option(ARGUV[i]);
+      unsigned i_start = (Mamecmdopt) ? 1 : 0;
+      char arg[1024];
+
+      for (i = i_start; i < ARGUC; i++)
+      {
+         arg[0] = '\0';
+
+         /* Prepend content path to cmd relative content path */
+         if (     strstr(ARGUV[i], ".")
+               && !strstr(ARGUV[i], g_rom_dir)
+               && i > 0
+               && ARGUV[i-1][0] == '-')
+         {
+            strcpy(arg, g_rom_dir);
+            strcat(arg, slash_str);
+            strcat(arg, ARGUV[i]);
+         }
+         else
+            strcpy(arg, ARGUV[i]);
+
+         Add_Option(arg);
+      }
    }
 
    return 0;
@@ -820,6 +828,7 @@ int mmain2(int argc, const char *argv)
    osd_options options;
 
    strcpy(gameName, argv);
+   Extract_AllPath(gameName);
 
    // handle cmd file
    if (strlen(gameName) >= strlen("cmd"))
@@ -851,6 +860,9 @@ int mmain2(int argc, const char *argv)
       return result;
 
    log_cb(RETRO_LOG_DEBUG, "Parameters:\n");
+
+   for (i = 0; i < 64; i++)
+      xargv_cmd[i] = NULL;
 
    for (i = 0; i < PARAMCOUNT; i++)
    {
