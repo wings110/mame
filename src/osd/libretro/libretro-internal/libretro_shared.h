@@ -55,6 +55,15 @@ enum
    RETRO_SETTING_LIGHTGUN_MODE_LIGHTGUN
 };
 
+enum
+{
+   ROTATION_MODE_NONE,
+   ROTATION_MODE_LIBRETRO,
+   ROTATION_MODE_INTERNAL,
+   ROTATION_MODE_TATE_ROL,
+   ROTATION_MODE_TATE_ROR
+};
+
 extern bool retro_load_ok;
 extern int video_changed;
 extern int retro_pause;

@@ -69,7 +69,7 @@ char joystick_saturation[8];
 // emu flags
 static bool arcade = false;
 static int FirstTimeUpdate = 1;
-int rotation_mode = 0;
+int rotation_mode = ROTATION_MODE_LIBRETRO;
 int libretro_rotation_allow = 0;
 int internal_rotation_allow = 0;
 int thread_mode = 0;
@@ -352,17 +352,33 @@ static void Set_Rotation_Option(int gameRot)
    libretro_rotation_allow = 0;
    internal_rotation_allow = 0;
 
-   if (rotation_mode == 2 && environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
+   if (rotation_mode == ROTATION_MODE_LIBRETRO && environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
    {
       /* Allow libretro rotation */
       libretro_rotation_allow = 1;
       Add_Option((char*)"-norotate");
       norotate = true;
    }
-   else if (rotation_mode == 1)
+   else if (rotation_mode == ROTATION_MODE_INTERNAL)
    {
       /* Allow internal rotation */
       internal_rotation_allow = 1;
+   }
+   else if (rotation_mode == ROTATION_MODE_TATE_ROL)
+   {
+      /* Allow internal rotation */
+      internal_rotation_allow = 1;
+      Add_Option((char*)"-rotate");
+      Add_Option((char*)"-rol");
+      Add_Option((char*)"-autorol");
+   }
+   else if (rotation_mode == ROTATION_MODE_TATE_ROR)
+   {
+      /* Allow internal rotation */
+      internal_rotation_allow = 1;
+      Add_Option((char*)"-rotate");
+      Add_Option((char*)"-ror");
+      Add_Option((char*)"-autoror");
    }
    else
    {

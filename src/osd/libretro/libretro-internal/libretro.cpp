@@ -231,7 +231,7 @@ void retro_set_environment(retro_environment_t cb)
       { option_mouse, "Mouse; disabled|enabled" },
       { option_lightgun, "Lightgun Mode; none|lightgun|touchscreen" },
       { option_lightgun_offscreen, "Lightgun Offscreen Position; free|fixed (top left)|fixed (bottom right)" },
-      { option_rotation_mode, "Rotation Mode; libretro|internal|none" },
+      { option_rotation_mode, "Rotation Mode; libretro|internal|tate-rol|tate-ror|none" },
       { option_renderer, "Alternate Renderer; disabled|enabled" },
       { option_res, "Alternate Renderer Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
       { option_overclock, "CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
@@ -397,11 +397,15 @@ static void check_variables(void)
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "libretro"))
-         rotation_mode = 2;
+         rotation_mode = ROTATION_MODE_LIBRETRO;
       else if (!strcmp(var.value, "internal"))
-         rotation_mode = 1;
+         rotation_mode = ROTATION_MODE_INTERNAL;
+      else if (!strcmp(var.value, "tate-rol"))
+         rotation_mode = ROTATION_MODE_TATE_ROL;
+      else if (!strcmp(var.value, "tate-ror"))
+         rotation_mode = ROTATION_MODE_TATE_ROR;
       else
-         rotation_mode = 0;
+         rotation_mode = ROTATION_MODE_NONE;
    }
 
    var.key   = option_thread_mode;
