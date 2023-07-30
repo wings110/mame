@@ -694,8 +694,8 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
          if (ret[j] & (1 << RETRO_DEVICE_ID_JOYPAD_R2))
             analog_r2 = 32767;
       }
-      joystate[j].a3[0] = -normalize_absolute_axis(analog_l2, 0, 32767);
-      joystate[j].a3[1] = -normalize_absolute_axis(analog_r2, 0, 32767);
+      joystate[j].a3[0] = -normalize_absolute_axis(analog_l2, -32767, 32767);
+      joystate[j].a3[1] = -normalize_absolute_axis(analog_r2, -32767, 32767);
    }
 }
 
