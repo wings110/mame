@@ -875,7 +875,12 @@ int mmain2(int argc, const char *argv)
       log_cb(RETRO_LOG_INFO, "Starting game from cmd: \"%s\"\n", CMDFILE);
       result = execute_game_cmd(ARGUV[ARGUC-1]);
    }
-   else if (!MgamePath[0] || strstr(argv, " -") || strstr(MgameName, core))
+   else if (gameName[0] && fexists(gameName))
+   {
+      log_cb(RETRO_LOG_INFO, "Starting game: \"%s\"\n", gameName);
+      result = execute_game(gameName);
+   }
+   else
    {
       char argv_trimmed[512];
       char argv_first[512];
@@ -907,11 +912,6 @@ int mmain2(int argc, const char *argv)
       parse_cmdline(argv_trimmed);
       log_cb(RETRO_LOG_INFO, "Starting game from command line: \"%s\"\n", argv_trimmed);
       result = execute_game_cmd(ARGUV[ARGUC-1]);
-   }
-   else
-   {
-      log_cb(RETRO_LOG_INFO, "Starting game: \"%s\"\n", gameName);
-      result = execute_game(gameName);
    }
 
    if (result < 0)
