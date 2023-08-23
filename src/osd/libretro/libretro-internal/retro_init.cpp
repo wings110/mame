@@ -78,6 +78,7 @@ int internal_rotation_allow = 0;
 int thread_mode = 0;
 // rom file name and path
 char g_rom_dir[1024];
+char cmd_rom_dir[512];
 char mediaType[10];
 static char MgamePath[1024];
 static char MparentPath[1024];
@@ -168,9 +169,6 @@ static int parsePath(char* path, char* gamePath, char* gameName)
       strncpy(gamePath, path, slashIndex);
    gamePath[slashIndex] = 0;
 
-   /* Replace initial content path */
-   strcpy(g_rom_dir, gamePath);
-
    strncpy(gameName, path + (slashIndex + 1), dotIndex - (slashIndex + 1));
    gameName[dotIndex - (slashIndex + 1)] = 0;
 
@@ -255,7 +253,7 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *ar
    int gameFound = 0;
    int num       = driver_list::find(gameName);
 
-   log_cb(RETRO_LOG_DEBUG, "Searching for driver: \"%s\"\n", gameName);
+   log_cb(RETRO_LOG_DEBUG, "Searching for driver: %s\n", gameName);
    *driverIndex  = num;
 
    if (num != -1)
@@ -552,6 +550,12 @@ static void Set_Path_Option(void)
    else
       snprintf(tmp_dir, sizeof(tmp_dir), "%s", g_rom_dir);
 
+   if (strcmp(g_rom_dir, cmd_rom_dir))
+   {
+      strcat(tmp_dir, ";");
+      strcat(tmp_dir, cmd_rom_dir);
+   }
+
    Add_Option((char*)(tmp_dir));
 }
 
@@ -708,7 +712,8 @@ static void parse_cmdline(const char *argv)
 static int execute_game_cmd(char* path)
 {
    unsigned i;
-   int driverIndex;
+   unsigned ARGUX;
+   int driverIndex = 0;
    int gameRot     = 0;
    bool CreateConf = (!strcmp(ARGUV[0],"-cc") || !strcmp(ARGUV[0],"-createconfig")) ? 1 : 0;
    bool Only1Arg   = (ARGUC == 1) ? 1 : 0;
@@ -719,8 +724,23 @@ static int execute_game_cmd(char* path)
 
    FirstTimeUpdate = 1;
 
+   /* Search for rompath in order to append it to global rompath */
+   for (i = 0; i < ARGUC; i++)
+   {
+      if (!strcmp(ARGUV[i], "-rp") || !strcmp(ARGUV[i], "-rompath"))
+         strcpy(cmd_rom_dir, ARGUV[i + 1]);
+   }
+
+   ARGUX = ARGUC - 1;
+   /* Make sure the game path is not a "rompath" */
+   if (!Only1Arg)
+   {
+      if (!strcmp(ARGUV[ARGUX - 1], "-rp") || !strcmp(ARGUV[ARGUX - 1], "-rompath"))
+         ARGUX = ARGUX - 2;
+   }
+
    /* split the path to directory and the name without the zip extension */
-   if (parsePath(Only1Arg ? path : ARGUV[ARGUC-1], MgamePath, MgameName) == 0)
+   if (parsePath(Only1Arg ? path : ARGUV[ARGUX], MgamePath, MgameName) == 0)
    {
       log_cb(RETRO_LOG_WARN, "Parse path failed! \"%s\"\n", path);
       strcpy(MgameName, path);
@@ -801,10 +821,24 @@ static int execute_game_cmd(char* path)
    {
       unsigned i_start = (Mamecmdopt) ? 1 : 0;
       char arg[1024];
+      bool skip_rompath = false;
 
       for (i = i_start; i < ARGUC; i++)
       {
          arg[0] = '\0';
+
+         if (skip_rompath)
+         {
+            skip_rompath = false;
+            continue;
+         }
+         else if (!mame_paths_enable
+               && !strcmp(ARGUV[i], "-rp")
+               && cmd_rom_dir[0])
+         {
+            skip_rompath = true;
+            continue;
+         }
 
          /* Prepend content path to cmd relative content path */
          if (     strstr(ARGUV[i], ".")
