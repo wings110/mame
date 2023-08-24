@@ -119,7 +119,8 @@ extern int thread_mode;
 extern float sound_timer;
 extern int screen_configured;
 
-static const char core[] = "mame";
+const char core[] = "mame";
+extern const char *slash_str;
 
 /* libretro callbacks */
 extern retro_log_printf_t log_cb;

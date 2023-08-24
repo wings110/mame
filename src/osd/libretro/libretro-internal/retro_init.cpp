@@ -99,29 +99,53 @@ int PARAMCOUNT = 0;
 // path configuration
 #define NB_OPTPATH 13
 
-static const char *dir_name[NB_OPTPATH]= {
-    "cfg","nvram","plugins","input",
-    "states" ,"snaps","diff","samples",
-    "artwork","cheat","ini","hash",""
+static const char *dir_name[NB_OPTPATH] =
+{
+   "cfg",
+   "diff",
+   "nvram",
+   "input",
+   "states",
+   "snaps",
+
+   "artwork",
+   "cheat",
+   "hash",
+   "ini",
+   "plugins",
+   "samples",
+   ""
 };
 
-static const char *opt_name[NB_OPTPATH]= {
-    "-cfg_directory","-nvram_directory","-pluginspath","-input_directory",
-    "-state_directory" ,"-snapshot_directory","-diff_directory","-samplepath",
-    "-artpath","-cheatpath","-inipath","-hashpath","-homepath"
+static const char *opt_name[NB_OPTPATH] =
+{
+    "-cfg_directory",
+    "-diff_directory",
+    "-nvram_directory",
+    "-input_directory",
+    "-state_directory",
+    "-snapshot_directory",
+
+    "-artpath",
+    "-cheatpath",
+    "-hashpath",
+    "-inipath",
+    "-pluginspath",
+    "-samplepath",
+    "-homepath"
 };
 
-int opt_type[NB_OPTPATH]={ // 0 for save_dir | 1 for system_dir
-    0,0,1,0,
-    0,0,0,1,
-    1,1,1,1,
-    1
+int opt_type[NB_OPTPATH] =
+{
+   // 0 for save_dir | 1 for system_dir
+   0,0,0,0,0,0,
+   1,1,1,1,1,1,1
 };
 
 //============================================================
 //  main
 //============================================================
-static int parsePath(char* path, char* gamePath, char* gameName)
+static int parsePath(const char *path, char *gamePath, char *gameName)
 {
    int i;
    int slashIndex = -1;
@@ -175,7 +199,7 @@ static int parsePath(char* path, char* gamePath, char* gameName)
    return 1;
 }
 
-static int parseSystemName(char* path, char* systemName)
+static int parseSystemName(const char *path, char *systemName)
 {
    int i, j = 0;
    int slashIndex[2] = {-1, -1};
@@ -205,7 +229,7 @@ static int parseSystemName(char* path, char* systemName)
    return 1;
 }
 
-static int parseParentPath(char* path, char* parentPath)
+static int parseParentPath(const char *path, char *parentPath)
 {
    int i, j = 0;
    int slashIndex[2] = {-1, -1};
@@ -248,10 +272,13 @@ static int parseParentPath(char* path, char* parentPath)
    return 1;
 }
 
-static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *arcade)
+static int getGameInfo(const char *gameName, int *rotation, int *driverIndex, bool *arcade)
 {
    int gameFound = 0;
    int num       = driver_list::find(gameName);
+
+   if (!gameName[0])
+      return gameFound;
 
    log_cb(RETRO_LOG_DEBUG, "Searching for driver: %s\n", gameName);
    *driverIndex  = num;
@@ -306,9 +333,12 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *ar
    return gameFound;
 }
 
-void Extract_AllPath(char *srcpath)
+void Extract_AllPath(const char *srcpath)
 {
    int result_value = 0;
+
+   if (!srcpath[0])
+      return;
 
    /* Split the path to directory
     * and the name without the zip extension. */
@@ -349,7 +379,7 @@ void Extract_AllPath(char *srcpath)
    log_cb(RETRO_LOG_DEBUG, "Path extraction result: Parent path = \"%s\"\n", MparentPath);
 }
 
-static void Add_Option(const char* option)
+static void Add_Option(const char *option)
 {
    sprintf(XARGV[PARAMCOUNT++], "%s", option);
 }
@@ -514,24 +544,21 @@ static void Set_Path_Option(void)
 
    /* Setup path option according to retro (save/system) directory,
     * or current if NULL. */
-
    for (i = 0; i < NB_OPTPATH; i++)
    {
       Add_Option((char*)(opt_name[i]));
 
       if (opt_type[i] == 0)
       {
-         if (retro_save_directory)
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_save_directory, slash, core, slash, dir_name[i]);
-         else
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash, dir_name[i], slash);
+         snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s",
+               (retro_save_directory) ? retro_save_directory : ".",
+               slash, core, slash, dir_name[i]);
       }
       else
       {
-         if (retro_system_directory)
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s", retro_system_directory, slash, core, slash, dir_name[i]);
-         else
-            snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s%c", ".", slash, core, slash, dir_name[i], slash);
+         snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s",
+               (retro_system_directory) ? retro_system_directory : ".",
+               slash, core, slash, dir_name[i]);
       }
 
       Add_Option((char*)(tmp_dir));
@@ -550,7 +577,7 @@ static void Set_Path_Option(void)
    else
       snprintf(tmp_dir, sizeof(tmp_dir), "%s", g_rom_dir);
 
-   if (strcmp(g_rom_dir, cmd_rom_dir))
+   if (cmd_rom_dir[0] && strcmp(g_rom_dir, cmd_rom_dir))
    {
       strcat(tmp_dir, ";");
       strcat(tmp_dir, cmd_rom_dir);
@@ -564,7 +591,7 @@ static void Set_Path_Option(void)
 //  main
 //============================================================
 
-static int execute_game(char* path)
+static int execute_game(char *path)
 {
    char tmp_dir[2048];
    int gameRot     = 0;
@@ -709,18 +736,18 @@ static void parse_cmdline(const char *argv)
    }
 }
 
-static int execute_game_cmd(char* path)
+static int execute_game_cmd(char *path)
 {
    unsigned i;
    unsigned ARGUX;
    int driverIndex = 0;
    int gameRot     = 0;
-   bool CreateConf = (!strcmp(ARGUV[0],"-cc") || !strcmp(ARGUV[0],"-createconfig")) ? 1 : 0;
+   bool CreateConf = (!strcmp(ARGUV[0], "-cc") || !strcmp(ARGUV[0], "-createconfig")) ? 1 : 0;
    bool Only1Arg   = (ARGUC == 1) ? 1 : 0;
-   bool Mamecmdopt = strcmp(ARGUV[0],core) == 0 ? 1: 0;
+   bool Mamecmdopt = (strcmp(ARGUV[0], core) == 0) ? 1 : 0;
 
    if (!Only1Arg)
-      CreateConf = (!strcmp(ARGUV[1],"-cc") || !strcmp(ARGUV[1],"-createconfig")) ? 1 : 0;
+      CreateConf = (!strcmp(ARGUV[1], "-cc") || !strcmp(ARGUV[1], "-createconfig")) ? 1 : 0;
 
    FirstTimeUpdate = 1;
 
@@ -731,19 +758,20 @@ static int execute_game_cmd(char* path)
          strcpy(cmd_rom_dir, ARGUV[i + 1]);
    }
 
-   ARGUX = ARGUC - 1;
+   ARGUX = (ARGUC > 0) ? ARGUC - 1 : ARGUC;
    /* Make sure the game path is not a "rompath" */
-   if (!Only1Arg)
+   if (ARGUC > 0 && ARGUX > 0)
    {
       if (!strcmp(ARGUV[ARGUX - 1], "-rp") || !strcmp(ARGUV[ARGUX - 1], "-rompath"))
          ARGUX = ARGUX - 2;
    }
 
    /* split the path to directory and the name without the zip extension */
-   if (parsePath(Only1Arg ? path : ARGUV[ARGUX], MgamePath, MgameName) == 0)
+   const char *path_arg = Only1Arg ? path : ARGUV[ARGUX];
+   if (path_arg[0] && parsePath(path_arg, MgamePath, MgameName) == 0)
    {
-      log_cb(RETRO_LOG_WARN, "Parse path failed! \"%s\"\n", path);
-      strcpy(MgameName, path);
+      log_cb(RETRO_LOG_WARN, "Parse path failed: \"%s\"\n", path_arg);
+      strcpy(MgameName, path_arg);
    }
 
    if (Only1Arg)
@@ -751,13 +779,14 @@ static int execute_game_cmd(char* path)
       /* split the path to directory and the name without the zip extension */
       if (parseSystemName(path, MsystemName) == 0)
       {
-         log_cb(RETRO_LOG_WARN, "Parse systemname failed! \"%s\"\n", path);
+         log_cb(RETRO_LOG_WARN, "Parse systemname failed: \"%s\"\n", path);
          strcpy(MsystemName, path);
       }
    }
 
    /* Find the game info. Exit if game driver was not found. */
-   if (getGameInfo(Only1Arg ? MgameName : ARGUV[0], &gameRot, &driverIndex, &arcade) == 0)
+   const char *game_arg = Only1Arg ? MgameName : ARGUV[0];
+   if (game_arg[0] && getGameInfo(game_arg, &gameRot, &driverIndex, &arcade) == 0)
    {
       /* handle -cc/-createconfig case */
       if (CreateConf)
@@ -766,11 +795,11 @@ static int execute_game_cmd(char* path)
       }
       else
       {
-         log_cb(RETRO_LOG_WARN, "Game not found: \"%s\"\n", MgameName);
+         log_cb(RETRO_LOG_WARN, "Game not found: \"%s\"\n", game_arg);
 
          if (Only1Arg)
          {
-            //test if system exist (based on parent path)
+            /* test if system exist (based on parent path) */
             if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) == 0)
             {
                log_cb(RETRO_LOG_ERROR, "Driver not found: \"%s\"\n", MsystemName);
@@ -954,21 +983,22 @@ int mmain2(int argc, const char *argv)
    if (result < 0)
       return result;
 
-   log_cb(RETRO_LOG_DEBUG, "Parameters:\n");
-
    for (i = 0; i < 64; i++)
       xargv_cmd[i] = NULL;
 
-   for (i = 0; i < PARAMCOUNT; i++)
+   if (PARAMCOUNT)
    {
-      xargv_cmd[i] = (char*)(XARGV[i]);
-      log_cb(RETRO_LOG_DEBUG, "  %s\n", XARGV[i]);
+      log_cb(RETRO_LOG_DEBUG, "Parameters:\n");
+
+      for (i = 0; i < PARAMCOUNT; i++)
+      {
+         xargv_cmd[i] = (char*)(XARGV[i]);
+         log_cb(RETRO_LOG_DEBUG, "  %s\n", XARGV[i]);
+      }
    }
 
    // launch mmain from retromain
    result = mmain(PARAMCOUNT, (char **)xargv_cmd);
-
-   xargv_cmd[PARAMCOUNT - 2] = NULL;
 
    return result/*==0?0:1*/;
 }

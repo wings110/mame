@@ -89,11 +89,11 @@ public:
 
 #ifndef INI_PATH
 #if defined(RETROMAME_WIN32)
-	#define INI_PATH ".;ini;ini/presets"
+	#define INI_PATH ""
 #elif defined(RETROMAME_MACOSX)
-	#define INI_PATH "$HOME/Library/Application Support/APP_NAME;$HOME/.APP_NAME;.;ini"
+	#define INI_PATH "$HOME/Library/Application Support/APP_NAME;$HOME/.APP_NAME"
 #else
-	#define INI_PATH "$HOME/.APP_NAME;.;ini"
+	#define INI_PATH "$HOME/.APP_NAME"
 #endif // MACOSX
 #endif // INI_PATH
 
@@ -112,68 +112,66 @@ int retro_entered_debugger;
 
 const options_entry retro_options::s_option_entries[] =
 {
-	{ RETROOPTION_INIPATH,                     INI_PATH,    core_options::option_type::STRING,     "path to ini files" },
-
+	{ RETROOPTION_INIPATH,                  INI_PATH,       core_options::option_type::STRING,  "path to ini files" },
 
 	// video options
-	{ nullptr,                                nullptr,       core_options::option_type::HEADER,     "SDL VIDEO OPTIONS" },
-// OS X can be trusted to have working hardware OpenGL, so default to it on for the best user experience
-	{ RETROOPTION_CENTERH,                      "1",        core_options::option_type::BOOLEAN,    "center horizontally within the view area" },
-	{ RETROOPTION_CENTERV,                      "1",        core_options::option_type::BOOLEAN,    "center vertically within the view area" },
-	{ RETROOPTION_SCALEMODE ";sm",         OSDOPTVAL_NONE,  core_options::option_type::STRING,     "Scale mode: none, hwblit, hwbest, yv12, yuy2, yv12x2, yuy2x2 (-video soft only)" },
-
+	{ nullptr,                              nullptr,        core_options::option_type::HEADER,  "SDL VIDEO OPTIONS" },
+	{ RETROOPTION_CENTERH,                  "1",            core_options::option_type::BOOLEAN, "center horizontally within the view area" },
+	{ RETROOPTION_CENTERV,                  "1",            core_options::option_type::BOOLEAN, "center vertically within the view area" },
+	{ RETROOPTION_SCALEMODE ";sm",          OSDOPTVAL_NONE, core_options::option_type::STRING,  "scale mode: none, hwblit, hwbest, yv12, yuy2, yv12x2, yuy2x2 (-video soft only)" },
 
 	// joystick mapping
-	{ nullptr,                               nullptr,   core_options::option_type::HEADER,     "SDL JOYSTICK MAPPING" },
-	{ RETROOPTION_JOYINDEX "1",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #1" },
-	{ RETROOPTION_JOYINDEX "2",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #2" },
-	{ RETROOPTION_JOYINDEX "3",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #3" },
-	{ RETROOPTION_JOYINDEX "4",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #4" },
-	{ RETROOPTION_JOYINDEX "5",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #5" },
-	{ RETROOPTION_JOYINDEX "6",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #6" },
-	{ RETROOPTION_JOYINDEX "7",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #7" },
-	{ RETROOPTION_JOYINDEX "8",                OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of joystick mapped to joystick #8" },
-	{ RETROOPTION_SIXAXIS,                     "0",    core_options::option_type::BOOLEAN,    "Use special handling for PS3 Sixaxis controllers" },
+	{ nullptr,                              nullptr,        core_options::option_type::HEADER,  "SDL JOYSTICK MAPPING" },
+	{ RETROOPTION_JOYINDEX "1",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #1" },
+	{ RETROOPTION_JOYINDEX "2",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #2" },
+	{ RETROOPTION_JOYINDEX "3",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #3" },
+	{ RETROOPTION_JOYINDEX "4",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #4" },
+	{ RETROOPTION_JOYINDEX "5",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #5" },
+	{ RETROOPTION_JOYINDEX "6",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #6" },
+	{ RETROOPTION_JOYINDEX "7",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #7" },
+	{ RETROOPTION_JOYINDEX "8",             OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of joystick mapped to joystick #8" },
+	{ RETROOPTION_SIXAXIS,                  "0",            core_options::option_type::BOOLEAN, "Use special handling for PS3 Sixaxis controllers" },
 
 #if (USE_XINPUT)
 	// lightgun mapping
-	{ nullptr,                               nullptr,   core_options::option_type::HEADER,     "SDL LIGHTGUN MAPPING" },
-	{ RETROOPTION_LIGHTGUNINDEX "1",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #1" },
-	{ RETROOPTION_LIGHTGUNINDEX "2",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #2" },
-	{ RETROOPTION_LIGHTGUNINDEX "3",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #3" },
-	{ RETROOPTION_LIGHTGUNINDEX "4",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #4" },
-	{ RETROOPTION_LIGHTGUNINDEX "5",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #5" },
-	{ RETROOPTION_LIGHTGUNINDEX "6",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #6" },
-	{ RETROOPTION_LIGHTGUNINDEX "7",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #7" },
-	{ RETROOPTION_LIGHTGUNINDEX "8",           OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of lightgun mapped to lightgun #8" },
+	{ nullptr,                              nullptr,        core_options::option_type::HEADER,  "SDL LIGHTGUN MAPPING" },
+	{ RETROOPTION_LIGHTGUNINDEX "1",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #1" },
+	{ RETROOPTION_LIGHTGUNINDEX "2",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #2" },
+	{ RETROOPTION_LIGHTGUNINDEX "3",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #3" },
+	{ RETROOPTION_LIGHTGUNINDEX "4",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #4" },
+	{ RETROOPTION_LIGHTGUNINDEX "5",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #5" },
+	{ RETROOPTION_LIGHTGUNINDEX "6",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #6" },
+	{ RETROOPTION_LIGHTGUNINDEX "7",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #7" },
+	{ RETROOPTION_LIGHTGUNINDEX "8",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of lightgun mapped to lightgun #8" },
 #endif
 
-	{ nullptr,                               nullptr,   core_options::option_type::HEADER,     "SDL MOUSE MAPPING" },
-	{ RETROOPTION_MOUSEINDEX "1",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #1" },
-	{ RETROOPTION_MOUSEINDEX "2",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #2" },
-	{ RETROOPTION_MOUSEINDEX "3",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #3" },
-	{ RETROOPTION_MOUSEINDEX "4",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #4" },
-	{ RETROOPTION_MOUSEINDEX "5",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #5" },
-	{ RETROOPTION_MOUSEINDEX "6",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #6" },
-	{ RETROOPTION_MOUSEINDEX "7",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #7" },
-	{ RETROOPTION_MOUSEINDEX "8",              OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of mouse mapped to mouse #8" },
+	{ nullptr,                              nullptr,        core_options::option_type::HEADER,  "SDL MOUSE MAPPING" },
+	{ RETROOPTION_MOUSEINDEX "1",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #1" },
+	{ RETROOPTION_MOUSEINDEX "2",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #2" },
+	{ RETROOPTION_MOUSEINDEX "3",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #3" },
+	{ RETROOPTION_MOUSEINDEX "4",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #4" },
+	{ RETROOPTION_MOUSEINDEX "5",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #5" },
+	{ RETROOPTION_MOUSEINDEX "6",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #6" },
+	{ RETROOPTION_MOUSEINDEX "7",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #7" },
+	{ RETROOPTION_MOUSEINDEX "8",           OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of mouse mapped to mouse #8" },
 
-	{ nullptr,                               nullptr,   core_options::option_type::HEADER,     "SDL KEYBOARD MAPPING" },
-	{ RETROOPTION_KEYBINDEX "1",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #1" },
-	{ RETROOPTION_KEYBINDEX "2",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #2" },
-	{ RETROOPTION_KEYBINDEX "3",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #3" },
-	{ RETROOPTION_KEYBINDEX "4",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #4" },
-	{ RETROOPTION_KEYBINDEX "5",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #5" },
-	{ RETROOPTION_KEYBINDEX "6",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #6" },
-	{ RETROOPTION_KEYBINDEX "7",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #7" },
-	{ RETROOPTION_KEYBINDEX "8",               OSDOPTVAL_AUTO, core_options::option_type::STRING,         "name of keyboard mapped to keyboard #8" },
+	{ nullptr,                              nullptr,        core_options::option_type::HEADER,  "SDL KEYBOARD MAPPING" },
+	{ RETROOPTION_KEYBINDEX "1",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #1" },
+	{ RETROOPTION_KEYBINDEX "2",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #2" },
+	{ RETROOPTION_KEYBINDEX "3",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #3" },
+	{ RETROOPTION_KEYBINDEX "4",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #4" },
+	{ RETROOPTION_KEYBINDEX "5",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #5" },
+	{ RETROOPTION_KEYBINDEX "6",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #6" },
+	{ RETROOPTION_KEYBINDEX "7",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #7" },
+	{ RETROOPTION_KEYBINDEX "8",            OSDOPTVAL_AUTO, core_options::option_type::STRING,  "name of keyboard mapped to keyboard #8" },
 
+#if 0
 	// SDL low level driver options
-	{ nullptr,                               nullptr,   core_options::option_type::HEADER,     "SDL LOWLEVEL DRIVER OPTIONS" },
-	{ RETROOPTION_VIDEODRIVER ";vd",           OSDOPTVAL_AUTO,  core_options::option_type::STRING,        "sdl video driver to use ('x11', 'directfb', ... or 'auto' for SDL default" },
-	{ RETROOPTION_RENDERDRIVER ";rd",          OSDOPTVAL_AUTO,  core_options::option_type::STRING,        "sdl render driver to use ('software', 'opengl', 'directfb' ... or 'auto' for SDL default" },
-	{ RETROOPTION_AUDIODRIVER ";ad",           OSDOPTVAL_AUTO,  core_options::option_type::STRING,        "sdl audio driver to use ('alsa', 'arts', ... or 'auto' for SDL default" },
-
+	{ nullptr,                              nullptr,        core_options::option_type::HEADER,  "SDL LOWLEVEL DRIVER OPTIONS" },
+	{ RETROOPTION_VIDEODRIVER ";vd",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "sdl video driver to use ('x11', 'directfb', ... or 'auto' for SDL default" },
+	{ RETROOPTION_RENDERDRIVER ";rd",       OSDOPTVAL_AUTO, core_options::option_type::STRING,  "sdl render driver to use ('software', 'opengl', 'directfb' ... or 'auto' for SDL default" },
+	{ RETROOPTION_AUDIODRIVER ";ad",        OSDOPTVAL_AUTO, core_options::option_type::STRING,  "sdl audio driver to use ('alsa', 'arts', ... or 'auto' for SDL default" },
+#endif
 
 	// End of list
 	{ nullptr }
@@ -187,7 +185,28 @@ retro_options::retro_options() : osd_options()
 {
 	std::string ini_path(INI_PATH);
 	add_entries(retro_options::s_option_entries);
+
+#if defined(RETROMAME_WIN32)
+	/* Pretend a home path for Windows */
+	const char *userprofile = getenv("USERPROFILE");
+	if (userprofile)
+	{
+		ini_path.append(userprofile);
+		ini_path.append(slash_str);
+		ini_path.append(".APP_NAME");
+	}
+#endif
+
 	strreplace(ini_path, "APP_NAME", emulator_info::get_appname_lower());
+
+	/* Add libretro system path as failsafe */
+	ini_path.append(";");
+	ini_path.append(retro_system_directory);
+	ini_path.append(slash_str);
+	ini_path.append(core);
+	ini_path.append(slash_str);
+	ini_path.append("ini");
+
 	set_default_value(RETROOPTION_INIPATH, ini_path.c_str());
 }
 
@@ -221,7 +240,7 @@ int mmain(int argc, char *argv[])
 
 #ifdef RETROMAME_UNIX
 	retro_entered_debugger = 0;
-#if (!defined(SDLMAME_MACOSX)) && (!defined(SDLMAME_HAIKU)) && (!defined(SDLMAME_EMSCRIPTEN)) && (!defined(SDLMAME_ANDROID))  && (!defined(RETROMAME))
+#if (!defined(SDLMAME_MACOSX)) && (!defined(SDLMAME_HAIKU)) && (!defined(SDLMAME_EMSCRIPTEN)) && (!defined(SDLMAME_ANDROID)) && (!defined(RETROMAME))
 	FcInit();
 #endif
 #endif
