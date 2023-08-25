@@ -949,35 +949,41 @@ int mmain2(int argc, const char *argv)
    else
    {
       char argv_trimmed[512];
-      char argv_first[512];
-      char a[512];
-      const char *first = NULL;
 
-      strcpy(argv_first, argv);
-      first = strtok(argv_first, " ");
+      argv_trimmed[0] = '\0';
 
-      /* Ignore first argument if 'mame' */
-      if (first && core_filename_ends_with(first, core))
+      if (argv[0])
       {
-         const char *a_temp = NULL;
-         a_temp = strstr(argv, " ");
-         if (a_temp[1])
-            a_temp++;
-         strcpy(a, a_temp);
-      }
-      else if (first)
-      {
-         const char *arg_ptr = strchr(argv, ' ');
-         extract_basename(a, first, sizeof(a));
-         if (arg_ptr)
-            strcat(a, arg_ptr);
-      }
+         char argv_first[512];
+         char a[512];
+         const char *first = NULL;
 
-      strcpy(argv_trimmed, (a[0]) ? a : argv);
+         strcpy(argv_first, argv);
+         first = strtok(argv_first, " ");
+
+         /* Ignore first argument if 'mame' */
+         if (first && core_filename_ends_with(first, core))
+         {
+            const char *a_temp = NULL;
+            a_temp = strstr(argv, " ");
+            if (a_temp[1])
+               a_temp++;
+            strcpy(a, a_temp);
+         }
+         else if (first)
+         {
+            const char *arg_ptr = strchr(argv, ' ');
+            extract_basename(a, first, sizeof(a));
+            if (arg_ptr)
+               strcat(a, arg_ptr);
+         }
+
+         strcpy(argv_trimmed, (a[0]) ? a : argv);
+      }
 
       parse_cmdline(argv_trimmed);
       log_cb(RETRO_LOG_INFO, "Starting game from command line: \"%s\"\n", argv_trimmed);
-      result = execute_game_cmd(ARGUV[ARGUC-1]);
+      result = execute_game_cmd(argv_trimmed);
    }
 
    if (result < 0)

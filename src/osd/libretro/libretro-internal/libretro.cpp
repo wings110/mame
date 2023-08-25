@@ -126,6 +126,10 @@ void extract_directory(char *buf, const char *path, size_t size)
       *base = '\0';
    else
       buf[0] = '\0';
+
+   base = strrchr(buf, '\"');
+   if (base)
+      strncpy(buf, base + 1, size - 1);
 }
 
 retro_log_printf_t log_cb = NULL;
