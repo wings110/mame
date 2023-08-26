@@ -494,7 +494,7 @@ void retro_window_info::update()
 
 				if (screen_refresh != retro_fps
 						&& screen_refresh <= 120.0f
-						&& screen_refresh >= 30.0f)
+						&& screen_refresh >= 40.0f)
 				{
 					retro_fps     = screen_refresh;
 					video_changed = 1;

@@ -1046,7 +1046,7 @@ void screen_device::configure(int width, int height, const rectangle &visarea, a
 	if (!screen_configured
 			&& retro_fps_new != retro_fps
 			&& retro_fps_new <= 120.0f
-			&& retro_fps_new >= 30.0f)
+			&& retro_fps_new >= 40.0f)
 		retro_fps = retro_fps_new;
 
 	screen_configured++;
