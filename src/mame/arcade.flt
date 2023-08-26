@@ -542,6 +542,7 @@ konami/tgtpanic.cpp
 konami/thunderx.cpp
 konami/timeplt.cpp
 konami/tmnt.cpp
+konami/tmnt2.cpp
 konami/tp84.cpp
 konami/trackfld.cpp
 konami/tutankhm.cpp
