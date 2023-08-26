@@ -28,6 +28,7 @@ int retro_pause    = 0;
 int SHIFTON        = -1;
 char RPATH[512];
 bool first_run     = true;
+bool audio_ready   = false;
 bool retro_load_ok = false;
 bool libretro_supports_bitmasks = false;
 
@@ -37,12 +38,13 @@ int max_width      = fb_width;
 int max_height     = fb_height;
 float retro_aspect = (float)4.0f / (float)3.0f;
 float view_aspect  = 1.0f;
+float sample_rate  = 48000.0f;
 float retro_fps    = 60.0f;
 float sound_timer  = 50.0f; /* default STREAMS_UPDATE_ATTOTIME, changed later to `retro_fps` */
 int video_changed  = 0;
 int screen_configured = 0;
 
-static bool draw_this_frame;
+static bool draw_this_frame = true;
 static int cpu_overclock = 100;
 
 static char option_joystick_deadzone[50];
@@ -181,8 +183,16 @@ static void free_output_audio_buffer()
 
 static void upload_output_audio_buffer()
 {
+   if (!audio_ready)
+   {
+      unsigned samples = (sample_rate / retro_fps);
+      memset(output_audio_buffer.data + output_audio_buffer.size, 0, samples * sizeof(*output_audio_buffer.data));
+      output_audio_buffer.size += samples;
+   }
    audio_batch_cb(output_audio_buffer.data, output_audio_buffer.size / 2);
    output_audio_buffer.size = 0;
+
+   audio_ready = false;
 }
 
 void retro_audio_queue(const int16_t *data, int32_t samples)
@@ -195,6 +205,8 @@ void retro_audio_queue(const int16_t *data, int32_t samples)
 
    memcpy(output_audio_buffer.data + output_audio_buffer.size, data, samples * sizeof(*output_audio_buffer.data));
    output_audio_buffer.size += samples;
+
+   audio_ready = true;
 }
 
 static const struct retro_controller_description default_controllers[] =
@@ -664,7 +676,7 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
    info->geometry.max_height   = max_height;
 
    info->timing.fps            = retro_fps;
-   info->timing.sample_rate    = 48000.0;
+   info->timing.sample_rate    = sample_rate;
 }
 
 static void fallback_log(enum retro_log_level level, const char *fmt, ...)

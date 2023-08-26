@@ -532,6 +532,8 @@ static void Set_Default_Option(void)
       snprintf(option, sizeof(option), "%%g/%s", MgameName);
       Add_Option(option);
    }
+
+   Add_Option("-update_in_pause");
 }
 
 static void Set_Path_Option(void)
