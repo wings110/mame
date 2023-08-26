@@ -287,6 +287,16 @@ int retro_window_info::window_init()
 		const rectangle &visarea = screen->visible_area();
 		svg_width  = render_round_nearest(visarea.width());
 		svg_height = render_round_nearest(visarea.height());
+
+		// limit huge size with native renderer
+		if (!alternate_renderer)
+		{
+			if (svg_width >= 1920)
+			{
+				svg_width  /= 2;
+				svg_height /= 2;
+			}
+		}
 	}
 
 	if (!alternate_renderer)
