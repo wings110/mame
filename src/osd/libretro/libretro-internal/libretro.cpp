@@ -785,6 +785,10 @@ void retro_init(void)
    init_output_audio_buffer(2048);
 
    retro_pause = 0;
+
+   log_cb(RETRO_LOG_INFO, "------------------------\n");
+   log_cb(RETRO_LOG_INFO, "MAME %s\n", build_version);
+   log_cb(RETRO_LOG_INFO, "------------------------\n");
 }
 
 void retro_deinit(void)
