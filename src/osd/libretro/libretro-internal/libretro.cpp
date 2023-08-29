@@ -209,6 +209,38 @@ void retro_audio_queue(const int16_t *data, int32_t samples)
    audio_ready = true;
 }
 
+/* LED interface */
+static retro_set_led_state_t led_state_cb = NULL;
+static unsigned int retro_led_state[2] = {0};
+
+#define CDD_READ        0x0100
+#define CDD_READY       0x0400
+#define CDD_DATA        0x1000
+
+int CDD_status  = CDD_READY;
+int CDD_control = 0;
+
+static void retro_led_interface(void)
+{
+   /* 0: Power
+    * 1: CD */
+
+   unsigned int led_state[2] = {0};
+   unsigned int l            = 0;
+
+   led_state[0] = (!retro_pause) ? 1 : 0;
+   led_state[1] = (CDD_status & CDD_READ) ? 1 : 0;
+
+   for (l = 0; l < sizeof(led_state)/sizeof(led_state[0]); l++)
+   {
+      if (retro_led_state[l] != led_state[l])
+      {
+         retro_led_state[l] = led_state[l];
+         led_state_cb(l, led_state[l]);
+      }
+   }
+}
+
 static const struct retro_controller_description default_controllers[] =
 {
    { "RetroPad", RETRO_DEVICE_JOYPAD },
@@ -229,6 +261,8 @@ static void retro_set_inputs(void)
 
 void retro_set_environment(retro_environment_t cb)
 {
+   struct retro_led_interface led_interface;
+
    sprintf(option_joystick_deadzone, "%s_%s", core, "joystick_deadzone");
    sprintf(option_joystick_saturation, "%s_%s", core, "joystick_saturation");
    sprintf(option_joystick_threshold, "%s_%s", core, "joystick_threshold");
@@ -293,6 +327,10 @@ void retro_set_environment(retro_environment_t cb)
 
    bool support_no_game = true;
    environ_cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &support_no_game);
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_LED_INTERFACE, &led_interface))
+      if (led_interface.set_led_state && !led_state_cb)
+         led_state_cb = led_interface.set_led_state;
 }
 
 static void update_runtime_variables(bool startup)
@@ -816,6 +854,10 @@ void retro_run(void)
    if (!retro_pause)
       retro_main_loop();
    RLOOP = 1;
+
+   /* LED interface */
+   if (led_state_cb)
+      retro_led_interface();
 
    if (first_run)
    {
