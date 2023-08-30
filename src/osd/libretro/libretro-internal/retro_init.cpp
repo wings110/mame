@@ -56,6 +56,7 @@ bool boot_to_osd_enable = false;
 bool boot_to_bios_enable = false;
 bool softlist_enable = false;
 bool softlist_auto = false;
+bool autoloadfastforward = false;
 bool write_config_enable = false;
 bool read_config_enable = false;
 bool auto_save_enable = false;

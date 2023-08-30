@@ -31,6 +31,8 @@ bool first_run     = true;
 bool audio_ready   = false;
 bool retro_load_ok = false;
 bool libretro_supports_bitmasks = false;
+static bool libretro_supports_ff_override = false;
+bool libretro_ff_enabled = false;
 
 int fb_width       = 640;
 int fb_height      = 480;
@@ -72,6 +74,7 @@ static char option_auto_save[50];
 static char option_softlist[50];
 static char option_softlist_media[50];
 static char option_media[50];
+static char option_autoloadfastforward[50];
 
 const char *retro_save_directory;
 const char *retro_system_directory;
@@ -241,6 +244,50 @@ static void retro_led_interface(void)
    }
 }
 
+void retro_fastforwarding(bool enabled)
+{
+   struct retro_fastforwarding_override ff_override;
+   bool frontend_ff_enabled = false;
+
+   if (!libretro_supports_ff_override)
+      return;
+
+   environ_cb(RETRO_ENVIRONMENT_GET_FASTFORWARDING, &frontend_ff_enabled);
+   if (enabled && frontend_ff_enabled)
+      return;
+
+   ff_override.fastforward    = enabled;
+   ff_override.inhibit_toggle = enabled;
+   libretro_ff_enabled        = enabled;
+
+   environ_cb(RETRO_ENVIRONMENT_SET_FASTFORWARDING_OVERRIDE, &ff_override);
+}
+
+static void retro_autoloadfastforwarding(void)
+{
+   if (!libretro_supports_ff_override)
+      return;
+
+   if (autoloadfastforward)
+   {
+      int ff             = -1;
+      int drive_led      = CDD_status & CDD_READ && CDD_status & CDD_DATA;
+
+      if (!drive_led && libretro_ff_enabled)
+         ff = 0;
+      else if (drive_led && !libretro_ff_enabled)
+         ff = 1;
+
+      if (ff > -1)
+         retro_fastforwarding((ff > 1) ? false : (ff) ? true : false);
+#if 0
+      if (ff > -1)
+         printf("CD FF:%2d led:%d\n",
+            ff, drive_led);
+#endif
+   }
+}
+
 static const struct retro_controller_description default_controllers[] =
 {
    { "RetroPad", RETRO_DEVICE_JOYPAD },
@@ -288,6 +335,7 @@ void retro_set_environment(retro_environment_t cb)
    sprintf(option_softlist, "%s_%s", core, "softlists_enable");
    sprintf(option_softlist_media, "%s_%s", core, "softlists_auto_media");
    sprintf(option_media, "%s_%s", core, "media_type");
+   sprintf(option_autoloadfastforward, "%s_%s", core, "autoloadfastforward");
 
    static const struct retro_variable vars[] =
    {
@@ -316,6 +364,7 @@ void retro_set_environment(retro_environment_t cb)
       { option_softlist, "Enable Softlists; enabled|disabled" },
       { option_softlist_media, "Softlist Automatic Media Type; enabled|disabled" },
       { option_media, "Media Type; rom|cart|flop|cdrm|cass|hard|serl|prin" },
+      { option_autoloadfastforward, "Automatic Load Fast-Forward; disabled|enabled" },
       { NULL, NULL },
    };
 
@@ -668,6 +717,17 @@ static void check_variables(void)
       if (!strcmp(var.value, "qbert"))
          sprintf(mame_4way_map, "%s", "4444s8888.4444s8888.444458888.444555888.ss5.222555666.222256666.2222s6666.2222s6666");
    }
+
+   var.key   = option_autoloadfastforward;
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "disabled"))
+         autoloadfastforward = false;
+      else
+         autoloadfastforward = true;
+   }
 }
 
 unsigned retro_api_version(void)
@@ -816,6 +876,9 @@ void retro_init(void)
    if (environ_cb(RETRO_ENVIRONMENT_GET_INPUT_BITMASKS, NULL))
       libretro_supports_bitmasks = true;
 
+   if (environ_cb(RETRO_ENVIRONMENT_SET_FASTFORWARDING_OVERRIDE, NULL))
+      libretro_supports_ff_override = true;
+
    static struct retro_keyboard_callback keyboard_callback = {retro_keyboard_event};
    environ_cb(RETRO_ENVIRONMENT_SET_KEYBOARD_CALLBACK, &keyboard_callback);
 
@@ -858,6 +921,10 @@ void retro_run(void)
    /* LED interface */
    if (led_state_cb)
       retro_led_interface();
+
+   /* Automatic loading fast-forward */
+   if (autoloadfastforward)
+      retro_autoloadfastforwarding();
 
    if (first_run)
    {

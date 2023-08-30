@@ -86,6 +86,7 @@ extern bool boot_to_osd_enable;
 extern bool boot_to_bios_enable;
 extern bool softlist_enable;
 extern bool softlist_auto;
+extern bool autoloadfastforward;
 extern bool write_config_enable;
 extern bool read_config_enable;
 extern bool hide_nagscreen;
