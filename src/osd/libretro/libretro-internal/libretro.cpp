@@ -17,6 +17,7 @@
 
 #include "libretro.h"
 #include "libretro_shared.h"
+#include "libretro_core_options.h"
 
 /* forward decls / externs / prototypes */
 
@@ -31,6 +32,7 @@ bool first_run     = true;
 bool audio_ready   = false;
 bool retro_load_ok = false;
 bool libretro_supports_bitmasks = false;
+static bool libretro_supports_option_categories = false;
 static bool libretro_supports_ff_override = false;
 bool libretro_ff_enabled = false;
 
@@ -48,33 +50,6 @@ int screen_configured = 0;
 
 static bool draw_this_frame = true;
 static int cpu_overclock = 100;
-
-static char option_joystick_deadzone[50];
-static char option_joystick_saturation[50];
-static char option_joystick_threshold[50];
-static char option_mame_4way[50];
-static char option_buttons_profiles[50];
-static char option_mouse[50];
-static char option_lightgun[50];
-static char option_lightgun_offscreen[50];
-static char option_rotation_mode[50];
-static char option_renderer[50];
-static char option_res[50];
-static char option_overclock[50];
-static char option_thread_mode[50];
-static char option_cheats[50];
-static char option_throttle[50];
-static char option_bios[50];
-static char option_osd[50];
-static char option_read_config[50];
-static char option_write_config[50];
-static char option_mame_paths[50];
-static char option_saves[50];
-static char option_auto_save[50];
-static char option_softlist[50];
-static char option_softlist_media[50];
-static char option_media[50];
-static char option_autoloadfastforward[50];
 
 const char *retro_save_directory;
 const char *retro_system_directory;
@@ -309,68 +284,12 @@ static void retro_set_inputs(void)
 void retro_set_environment(retro_environment_t cb)
 {
    struct retro_led_interface led_interface;
-
-   sprintf(option_joystick_deadzone, "%s_%s", core, "joystick_deadzone");
-   sprintf(option_joystick_saturation, "%s_%s", core, "joystick_saturation");
-   sprintf(option_joystick_threshold, "%s_%s", core, "joystick_threshold");
-   sprintf(option_mame_4way, "%s_%s", core, "mame_4way_enable");
-   sprintf(option_buttons_profiles, "%s_%s", core, "buttons_profiles");
-   sprintf(option_mouse, "%s_%s", core, "mouse_enable");
-   sprintf(option_lightgun, "%s_%s", core, "lightgun_mode");
-   sprintf(option_lightgun_offscreen, "%s_%s", core, "lightgun_offscreen_mode");
-   sprintf(option_rotation_mode, "%s_%s", core, "rotation_mode");
-   sprintf(option_renderer, "%s_%s", core, "alternate_renderer");
-   sprintf(option_res, "%s_%s", core, "altres");
-   sprintf(option_overclock, "%s_%s", core, "cpu_overclock");
-   sprintf(option_thread_mode, "%s_%s", core, "thread_mode");
-   sprintf(option_cheats, "%s_%s", core, "cheats_enable");
-   sprintf(option_throttle, "%s_%s", core, "throttle");
-   sprintf(option_bios, "%s_%s", core, "boot_to_bios");
-   sprintf(option_osd, "%s_%s", core, "boot_to_osd");
-   sprintf(option_read_config, "%s_%s", core, "read_config");
-   sprintf(option_write_config, "%s_%s", core, "write_config");
-   sprintf(option_mame_paths, "%s_%s", core, "mame_paths_enable");
-   sprintf(option_saves, "%s_%s", core, "saves");
-   sprintf(option_auto_save, "%s_%s", core, "auto_save");
-   sprintf(option_softlist, "%s_%s", core, "softlists_enable");
-   sprintf(option_softlist_media, "%s_%s", core, "softlists_auto_media");
-   sprintf(option_media, "%s_%s", core, "media_type");
-   sprintf(option_autoloadfastforward, "%s_%s", core, "autoloadfastforward");
-
-   static const struct retro_variable vars[] =
-   {
-      { option_joystick_deadzone, "Joystick Deadzone; 0.15|0.00|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
-      { option_joystick_saturation, "Joystick Saturation; 0.85|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
-      { option_joystick_threshold, "Joystick Threshold; 0.30|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
-      { option_mame_4way, "Joystick 4-way Simulation; disabled|4way|strict|qbert"},
-      { option_buttons_profiles, "Profile Buttons Per Game; disabled|enabled" },
-      { option_mouse, "Mouse; disabled|enabled" },
-      { option_lightgun, "Lightgun Mode; none|lightgun|touchscreen" },
-      { option_lightgun_offscreen, "Lightgun Offscreen Position; free|fixed (top left)|fixed (bottom right)" },
-      { option_rotation_mode, "Screen Rotation Mode; libretro|internal|tate-rol|tate-ror|none" },
-      { option_renderer, "Alternate Renderer; disabled|enabled" },
-      { option_res, "Alternate Renderer Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
-      { option_overclock, "CPU Overclock; default|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150|155|160|165|170|175|180|185|190|195|200" },
-      { option_thread_mode, "Enable Threads; enabled|disabled" },
-      { option_cheats, "Enable Cheats; disabled|enabled" },
-      { option_throttle, "Enable Throttle; disabled|enabled" },
-      { option_bios, "Boot to BIOS; disabled|enabled" },
-      { option_osd, "Boot to OSD; disabled|enabled" },
-      { option_read_config, "Read Configuration; disabled|enabled" },
-      { option_write_config, "Write Configuration; disabled|enabled" },
-      { option_mame_paths, "MAME INI Paths; disabled|enabled" },
-      { option_saves, "Save State Naming; game|system" },
-      { option_auto_save, "Auto Save/Load States; disabled|enabled" },
-      { option_softlist, "Enable Softlists; enabled|disabled" },
-      { option_softlist_media, "Softlist Automatic Media Type; enabled|disabled" },
-      { option_media, "Media Type; rom|cart|flop|cdrm|cass|hard|serl|prin" },
-      { option_autoloadfastforward, "Automatic Load Fast-Forward; disabled|enabled" },
-      { NULL, NULL },
-   };
+   bool option_categories = false;
 
    environ_cb = cb;
 
-   cb(RETRO_ENVIRONMENT_SET_VARIABLES, (void*)vars);
+   libretro_set_core_options(environ_cb, &option_categories);
+   libretro_supports_option_categories |= option_categories;
 
    retro_set_inputs();
 
@@ -409,9 +328,54 @@ static void check_variables(void)
 {
    struct retro_variable var = {0};
 
-   var.key   = option_mouse;
+   var.key   = CORE_NAME "_joystick_deadzone";
    var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      strcpy(joystick_deadzone, var.value);
+   }
 
+   var.key   = CORE_NAME "_joystick_saturation";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      strcpy(joystick_saturation, var.value);
+   }
+
+   var.key   = CORE_NAME "_joystick_threshold";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      strcpy(joystick_threshold, var.value);
+   }
+
+   var.key   = CORE_NAME "_mame_4way_enable";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      mame_4way_enable = true;
+      if (!strcmp(var.value, "disabled"))
+         mame_4way_enable = false;
+      if (!strcmp(var.value, "4way"))
+         sprintf(mame_4way_map, "%s", "s8.4s8.44s8.4445");
+      if (!strcmp(var.value, "strict"))
+         sprintf(mame_4way_map, "%s", "ss8.sss8.4sss8.44s5.4445");
+      if (!strcmp(var.value, "qbert"))
+         sprintf(mame_4way_map, "%s", "4444s8888.4444s8888.444458888.444555888.ss5.222555666.222256666.2222s6666.2222s6666");
+   }
+
+   var.key   = CORE_NAME "_buttons_profiles";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "disabled"))
+         buttons_profiles = false;
+      if (!strcmp(var.value, "enabled"))
+         buttons_profiles = true;
+   }
+
+   var.key   = CORE_NAME "_mouse_enable";
+   var.value = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "disabled"))
@@ -420,7 +384,7 @@ static void check_variables(void)
          mouse_enable = true;
    }
 
-   var.key   = option_lightgun;
+   var.key   = CORE_NAME "_lightgun_mode";
    var.value = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -432,9 +396,8 @@ static void check_variables(void)
          lightgun_mode = RETRO_SETTING_LIGHTGUN_MODE_DISABLED;
    }
 
-   var.key   = option_lightgun_offscreen;
+   var.key   = CORE_NAME "_lightgun_offscreen_mode";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "free"))
@@ -445,76 +408,8 @@ static void check_variables(void)
          lightgun_offscreen_mode = 2;
    }
 
-   var.key   = option_buttons_profiles;
+   var.key   = CORE_NAME "_rotation_mode";
    var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (!strcmp(var.value, "disabled"))
-         buttons_profiles = false;
-      if (!strcmp(var.value, "enabled"))
-         buttons_profiles = true;
-   }
-
-   var.key   = option_joystick_deadzone;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      strcpy(joystick_deadzone, var.value);
-   }
-
-   var.key   = option_joystick_saturation;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      strcpy(joystick_saturation, var.value);
-   }
-
-   var.key   = option_joystick_threshold;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      strcpy(joystick_threshold, var.value);
-   }
-
-   var.key   = option_throttle;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (!strcmp(var.value, "disabled"))
-         throttle_enable = false;
-      if (!strcmp(var.value, "enabled"))
-         throttle_enable = true;
-   }
-
-   var.key   = option_cheats;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (!strcmp(var.value, "disabled"))
-         cheats_enable = false;
-      if (!strcmp(var.value, "enabled"))
-         cheats_enable = true;
-   }
-
-   var.key   = option_overclock;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      cpu_overclock = 100;
-      if (strcmp(var.value, "default"))
-        cpu_overclock = atoi(var.value);
-   }
-
-   var.key   = option_rotation_mode;
-   var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "libretro"))
@@ -529,20 +424,8 @@ static void check_variables(void)
          rotation_mode = ROTATION_MODE_NONE;
    }
 
-   var.key   = option_thread_mode;
+   var.key   = CORE_NAME "_alternate_renderer";
    var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (!strcmp(var.value, "enabled"))
-         thread_mode = 1;
-      else
-         thread_mode = 0;
-   }
- 
-   var.key   = option_renderer;
-   var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       bool alternate_renderer_prev = alternate_renderer;
@@ -556,9 +439,8 @@ static void check_variables(void)
          video_changed = 2;
    }
 
-   var.key   = option_res;
+   var.key   = CORE_NAME "_altres";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (alternate_renderer)
@@ -595,83 +477,57 @@ static void check_variables(void)
       }
    }
 
-   var.key   = option_osd;
+   var.key   = CORE_NAME "_cpu_overclock";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
-      if (!strcmp(var.value, "enabled"))
-         boot_to_osd_enable = true;
-      if (!strcmp(var.value, "disabled"))
-         boot_to_osd_enable = false;
+      cpu_overclock = 100;
+      if (strcmp(var.value, "default"))
+         cpu_overclock = atoi(var.value);
    }
 
-   var.key = option_read_config;
+   var.key   = CORE_NAME "_autoloadfastforward";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "disabled"))
-         read_config_enable = false;
-      if (!strcmp(var.value, "enabled"))
-         read_config_enable = true;
+         autoloadfastforward = false;
+      else
+         autoloadfastforward = true;
    }
 
-   var.key   = option_auto_save;
+   var.key   = CORE_NAME "_thread_mode";
    var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "enabled"))
+         thread_mode = 1;
+      else
+         thread_mode = 0;
+   }
 
+   var.key   = CORE_NAME "_cheats_enable";
+   var.value = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "disabled"))
-         auto_save_enable = false;
+         cheats_enable = false;
       if (!strcmp(var.value, "enabled"))
-         auto_save_enable = true;
+         cheats_enable = true;
    }
 
-   var.key   = option_saves;
+   var.key   = CORE_NAME "_throttle";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
-      if (!strcmp(var.value, "game"))
-         game_specific_saves_enable = true;
-      if (!strcmp(var.value, "system"))
-         game_specific_saves_enable = false;
-   }
-
-   var.key   = option_media;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      sprintf(mediaType,"-%s",var.value);
-   }
-
-   var.key   = option_softlist;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (!strcmp(var.value, "enabled"))
-         softlist_enable = true;
       if (!strcmp(var.value, "disabled"))
-         softlist_enable = false;
-   }
-
-   var.key   = option_softlist_media;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
+         throttle_enable = false;
       if (!strcmp(var.value, "enabled"))
-         softlist_auto = true;
-      if (!strcmp(var.value, "disabled"))
-         softlist_auto = false;
+         throttle_enable = true;
    }
 
-   var.key = option_bios;
+   var.key   = CORE_NAME "_boot_to_bios";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "enabled"))
@@ -680,9 +536,28 @@ static void check_variables(void)
          boot_to_bios_enable = false;
    }
 
-   var.key = option_write_config;
+   var.key   = CORE_NAME "_boot_to_osd";
    var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "enabled"))
+         boot_to_osd_enable = true;
+      if (!strcmp(var.value, "disabled"))
+         boot_to_osd_enable = false;
+   }
 
+   var.key = CORE_NAME "_read_config";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "disabled"))
+         read_config_enable = false;
+      if (!strcmp(var.value, "enabled"))
+         read_config_enable = true;
+   }
+
+   var.key   = CORE_NAME "_write_config";
+   var.value = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "disabled"))
@@ -691,9 +566,8 @@ static void check_variables(void)
          write_config_enable = true;
    }
 
-   var.key   = option_mame_paths;
+   var.key   = CORE_NAME "_mame_paths_enable";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "enabled"))
@@ -702,31 +576,52 @@ static void check_variables(void)
          mame_paths_enable = false;
    }
 
-   var.key   = option_mame_4way;
+   var.key   = CORE_NAME "_saves";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
-      mame_4way_enable = true;
-      if (!strcmp(var.value, "disabled"))
-         mame_4way_enable = false;
-      if (!strcmp(var.value, "4way"))
-         sprintf(mame_4way_map, "%s", "s8.4s8.44s8.4445");
-      if (!strcmp(var.value, "strict"))
-         sprintf(mame_4way_map, "%s", "ss8.sss8.4sss8.44s5.4445");
-      if (!strcmp(var.value, "qbert"))
-         sprintf(mame_4way_map, "%s", "4444s8888.4444s8888.444458888.444555888.ss5.222555666.222256666.2222s6666.2222s6666");
+      if (!strcmp(var.value, "game"))
+         game_specific_saves_enable = true;
+      if (!strcmp(var.value, "system"))
+         game_specific_saves_enable = false;
    }
 
-   var.key   = option_autoloadfastforward;
+   var.key   = CORE_NAME "_auto_save";
    var.value = NULL;
-
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "disabled"))
-         autoloadfastforward = false;
-      else
-         autoloadfastforward = true;
+         auto_save_enable = false;
+      if (!strcmp(var.value, "enabled"))
+         auto_save_enable = true;
+   }
+
+
+   var.key   = CORE_NAME "_softlists_enable";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "enabled"))
+         softlist_enable = true;
+      if (!strcmp(var.value, "disabled"))
+         softlist_enable = false;
+   }
+
+   var.key   = CORE_NAME "_softlists_auto_media";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "enabled"))
+         softlist_auto = true;
+      if (!strcmp(var.value, "disabled"))
+         softlist_auto = false;
+   }
+
+   var.key   = CORE_NAME "_media_type";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      sprintf(mediaType,"-%s",var.value);
    }
 }
 

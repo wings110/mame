@@ -203,7 +203,7 @@ retro_options::retro_options() : osd_options()
 	ini_path.append(";");
 	ini_path.append(retro_system_directory);
 	ini_path.append(slash_str);
-	ini_path.append(core);
+	ini_path.append(emulator_info::get_appname_lower());
 	ini_path.append(slash_str);
 	ini_path.append("ini");
 

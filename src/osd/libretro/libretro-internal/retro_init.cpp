@@ -476,7 +476,7 @@ static void Set_Default_Option(void)
    /* some hardcoded default options. */
 
    PARAMCOUNT = 0;
-   Add_Option(core);
+   Add_Option(CORE_NAME);
 
    Add_Option("-joystick");
    Add_Option("-joystick_deadzone");
@@ -555,13 +555,13 @@ static void Set_Path_Option(void)
       {
          snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s",
                (retro_save_directory) ? retro_save_directory : ".",
-               slash, core, slash, dir_name[i]);
+               slash, CORE_NAME, slash, dir_name[i]);
       }
       else
       {
          snprintf(tmp_dir, sizeof(tmp_dir), "%s%c%s%c%s",
                (retro_system_directory) ? retro_system_directory : ".",
-               slash, core, slash, dir_name[i]);
+               slash, CORE_NAME, slash, dir_name[i]);
       }
 
       Add_Option((char*)(tmp_dir));
@@ -575,8 +575,8 @@ static void Set_Path_Option(void)
    if (retro_system_directory)
       snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s%c%s%c%s;%s%c%s%c%s",
             g_rom_dir,
-            retro_system_directory, slash, core, slash, "bios",
-            retro_system_directory, slash, core, slash, "roms");
+            retro_system_directory, slash, CORE_NAME, slash, "bios",
+            retro_system_directory, slash, CORE_NAME, slash, "roms");
    else
       snprintf(tmp_dir, sizeof(tmp_dir), "%s", g_rom_dir);
 
@@ -747,7 +747,7 @@ static int execute_game_cmd(char *path)
    int gameRot     = 0;
    bool CreateConf = (!strcmp(ARGUV[0], "-cc") || !strcmp(ARGUV[0], "-createconfig")) ? 1 : 0;
    bool Only1Arg   = (ARGUC == 1) ? 1 : 0;
-   bool Mamecmdopt = (strcmp(ARGUV[0], core) == 0) ? 1 : 0;
+   bool Mamecmdopt = (strcmp(ARGUV[0], CORE_NAME) == 0) ? 1 : 0;
 
    if (!Only1Arg)
       CreateConf = (!strcmp(ARGUV[1], "-cc") || !strcmp(ARGUV[1], "-createconfig")) ? 1 : 0;
@@ -794,7 +794,7 @@ static int execute_game_cmd(char *path)
       /* handle -cc/-createconfig case */
       if (CreateConf)
       {
-         log_cb(RETRO_LOG_INFO, "Create config: \"%s\"\n", core);
+         log_cb(RETRO_LOG_INFO, "Create config: \"%s\"\n", CORE_NAME);
       }
       else
       {
@@ -965,7 +965,7 @@ int mmain2(int argc, const char *argv)
          first = strtok(argv_first, " ");
 
          /* Ignore first argument if 'mame' */
-         if (first && core_filename_ends_with(first, core))
+         if (first && core_filename_ends_with(first, CORE_NAME))
          {
             const char *a_temp = NULL;
             a_temp = strstr(argv, " ");

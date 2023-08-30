@@ -27,6 +27,8 @@
 #define PIXEL_TYPE UINT16
 #endif
 
+#define CORE_NAME "mame"
+
 enum
 {
    RETROPAD_B,
@@ -68,7 +70,6 @@ extern bool retro_load_ok;
 extern int video_changed;
 extern int retro_pause;
 extern int mame_reset;
-extern int ui_ipt_pushchar;
 extern char g_rom_dir[1024];
 extern char mediaType[10];
 extern const char *retro_save_directory;
@@ -77,8 +78,6 @@ extern const char *retro_content_directory;
 
 extern int  lightgun_mode;
 extern int  lightgun_offscreen_mode;
-extern bool experimental_cmdline;
-extern bool hide_gameinfo;
 extern bool mouse_enable;
 extern bool cheats_enable;
 extern bool alternate_renderer;
@@ -89,8 +88,6 @@ extern bool softlist_auto;
 extern bool autoloadfastforward;
 extern bool write_config_enable;
 extern bool read_config_enable;
-extern bool hide_nagscreen;
-extern bool hide_warnings;
 extern bool throttle_enable;
 extern bool auto_save_enable;
 extern bool game_specific_saves_enable;
@@ -120,7 +117,6 @@ extern int thread_mode;
 extern float sound_timer;
 extern int screen_configured;
 
-const char core[] = "mame";
 extern const char *slash_str;
 
 /* libretro callbacks */
