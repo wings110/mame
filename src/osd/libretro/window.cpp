@@ -39,6 +39,10 @@
 
 #include "libretro-internal/libretro_shared.h"
 
+extern bool libretro_supports_ff_override;
+extern void retro_fastforwarding(bool enabled);
+static bool retro_fastforward;
+
 extern int max_width;
 extern int max_height;
 extern int libretro_rotation_allow;
@@ -474,6 +478,36 @@ void retro_window_info::update()
 			event_wait_ticks = osd_ticks_per_second(); // block at most a second
 		else
 			event_wait_ticks = 0;
+
+		/* Fast-forward shenanigans */
+		if (libretro_supports_ff_override)
+		{
+			bool frontend_ff_enabled = false;
+
+			environ_cb(RETRO_ENVIRONMENT_GET_FASTFORWARDING, &frontend_ff_enabled);
+
+			/* Make sure throttle is disabled when frontend is fast-forwarding,
+			 * only when throttle is enabled at startup */
+			if (machine().options().throttle())
+			{
+				if (frontend_ff_enabled && machine().video().throttled())
+					machine().video().set_throttled(false);
+				else if (!frontend_ff_enabled && !machine().video().throttled())
+					machine().video().set_throttled(true);
+			}
+
+			/* Make sure frontend is also fast-forwarding with the core */
+			if (machine().video().fastforward() && !retro_fastforward)
+			{
+				retro_fastforwarding(true);
+				retro_fastforward = true;
+			}
+			else if (!machine().video().fastforward() && retro_fastforward)
+			{
+				retro_fastforwarding(false);
+				retro_fastforward = false;
+			}
+		}
 
 		if (m_rendered_event.wait(event_wait_ticks))
 		{

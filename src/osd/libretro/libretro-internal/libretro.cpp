@@ -33,7 +33,7 @@ bool audio_ready   = false;
 bool retro_load_ok = false;
 bool libretro_supports_bitmasks = false;
 static bool libretro_supports_option_categories = false;
-static bool libretro_supports_ff_override = false;
+bool libretro_supports_ff_override = false;
 bool libretro_ff_enabled = false;
 
 int fb_width       = 640;
@@ -243,7 +243,8 @@ static void retro_autoloadfastforwarding(void)
    if (!libretro_supports_ff_override)
       return;
 
-   if (autoloadfastforward)
+   if (     autoloadfastforward
+         && !mame_machine_manager::instance()->machine()->video().fastforward())
    {
       int ff             = -1;
       int drive_led      = CDD_status & CDD_READ && CDD_status & CDD_DATA;
