@@ -9,7 +9,10 @@ alba/rmhaihai.cpp
 alba/vsmjtria.cpp
 alliedleisure/ace.cpp
 alliedleisure/aleisttl.cpp
+alliedleisure/aztarac.cpp
 alliedleisure/clayshoo.cpp
+alliedleisure/killcom.cpp
+alliedleisure/trvquest.cpp
 alpha/alpha68k.cpp
 alpha/alpha68k_i.cpp
 alpha/alpha68k_n.cpp
@@ -125,8 +128,8 @@ atlus/ohmygod.cpp
 atlus/patapata.cpp
 atlus/rallypnt.cpp
 barcrest/mpu1.cpp
-barcrest/mpu2.cpp
 barcrest/mpu3.cpp
+barcrest/mpu4.cpp
 barcrest/mpu4avan.cpp
 barcrest/mpu4bwb.cpp
 barcrest/mpu4concept.cpp
@@ -342,10 +345,6 @@ galaxian/galaxian_rockclim.cpp
 galaxian/galaxold.cpp
 galaxian/scobra.cpp
 galaxian/scramble.cpp
-gameplan/enigma2.cpp
-gameplan/gameplan.cpp
-gameplan/toratora.cpp
-gameplan/trvquest.cpp
 gametron/gatron.cpp
 gametron/gotya.cpp
 gametron/sbugger.cpp
@@ -640,7 +639,6 @@ misc/astropc.cpp
 misc/atronic.cpp
 misc/attckufo.cpp
 misc/avt.cpp
-misc/aztarac.cpp
 misc/bailey.cpp
 misc/beaminv.cpp
 misc/beezer.cpp
@@ -706,6 +704,7 @@ misc/ecoinfr.cpp
 misc/efdt.cpp
 misc/efg8080.cpp
 misc/electra.cpp
+misc/enigma2.cpp
 misc/epos.cpp
 misc/esd16.cpp
 misc/esh.cpp
@@ -899,6 +898,7 @@ misc/thayers.cpp
 misc/tickee.cpp
 misc/tmspoker.cpp
 misc/tomsadvs.cpp
+misc/toratora.cpp
 misc/triviaquiz.cpp
 misc/trivrus.cpp
 misc/truco.cpp
