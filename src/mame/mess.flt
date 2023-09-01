@@ -737,10 +737,12 @@ sfrj/orao.cpp
 sfrj/pecom.cpp
 sfrj/tim011.cpp
 sfrj/tim100.cpp
-sgi/4dpi.cpp
 sgi/crimson.cpp
-sgi/indigo.cpp
 sgi/indy_indigo2.cpp
+sgi/ip4.cpp
+sgi/ip6.cpp
+sgi/ip12.cpp
+sgi/ip20.cpp
 sgi/iris_power.cpp
 sgi/iris3130.cpp
 sgi/o2.cpp
