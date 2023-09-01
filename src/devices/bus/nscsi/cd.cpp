@@ -1,5 +1,9 @@
 // license:BSD-3-Clause
 // copyright-holders:Olivier Galibert
+#ifdef __LIBRETRO__
+extern int CDD_status;
+#endif
+
 #include "emu.h"
 #include "bus/nscsi/cd.h"
 
@@ -816,6 +820,9 @@ void nscsi_cdrom_device::scsi_command()
 		nscsi_full_device::scsi_command();
 		break;
 	}
+#ifdef __LIBRETRO__
+	CDD_status = (scsi_cmdbuf[4]) ? 0x3100 : 0;
+#endif
 }
 
 enum sgi_scsi_command_e : uint8_t {

@@ -194,9 +194,9 @@ static unsigned int retro_led_state[2] = {0};
 #define CDD_READ        0x0100
 #define CDD_READY       0x0400
 #define CDD_DATA        0x1000
+#define CDD_SCSI        0x2000
 
-int CDD_status  = CDD_READY;
-int CDD_control = 0;
+int CDD_status = CDD_READY;
 
 static void retro_led_interface(void)
 {
@@ -217,6 +217,9 @@ static void retro_led_interface(void)
          led_state_cb(l, led_state[l]);
       }
    }
+
+   if (CDD_status & CDD_SCSI)
+      CDD_status &= ~(CDD_READ | CDD_DATA);
 }
 
 void retro_fastforwarding(bool enabled)
@@ -236,8 +239,13 @@ void retro_fastforwarding(bool enabled)
    libretro_ff_enabled        = enabled;
 
    environ_cb(RETRO_ENVIRONMENT_SET_FASTFORWARDING_OVERRIDE, &ff_override);
+
+   /* Maximize speed by maximizing frame-skip like MAME FF */
+   mame_machine_manager::instance()->machine()->video().set_frameskip((enabled) ? 10 : 0);
 }
 
+static int ff_counter_on  = 0;
+static int ff_counter_off = 0;
 static void retro_autoloadfastforwarding(void)
 {
    if (!libretro_supports_ff_override)
@@ -250,16 +258,32 @@ static void retro_autoloadfastforwarding(void)
       int drive_led      = CDD_status & CDD_READ && CDD_status & CDD_DATA;
 
       if (!drive_led && libretro_ff_enabled)
-         ff = 0;
+      {
+         int ff_max = (CDD_status & CDD_SCSI) ? 10 : 0;
+         ff_counter_on = 0;
+         ff_counter_off++;
+         if (ff_counter_off > ff_max)
+            ff = 0;
+      }
       else if (drive_led && !libretro_ff_enabled)
-         ff = 1;
+      {
+         ff_counter_off = 0;
+         ff_counter_on++;
+         if (ff_counter_on > 0)
+            ff = 1;
+      }
+      else
+      {
+         ff_counter_off = ff_counter_on = 0;
+         ff = -2;
+      }
 
       if (ff > -1)
          retro_fastforwarding((ff > 1) ? false : (ff) ? true : false);
 #if 0
       if (ff > -1)
-         printf("CD FF:%2d led:%d\n",
-            ff, drive_led);
+         printf("CD FF:%2d led:%d - on:%3d off:%3d\n",
+            ff, drive_led, ff_counter_on, ff_counter_off);
 #endif
    }
 }
@@ -814,13 +838,13 @@ void retro_run(void)
       retro_main_loop();
    RLOOP = 1;
 
-   /* LED interface */
-   if (led_state_cb)
-      retro_led_interface();
-
    /* Automatic loading fast-forward */
    if (autoloadfastforward)
       retro_autoloadfastforwarding();
+
+   /* LED interface */
+   if (led_state_cb)
+      retro_led_interface();
 
    if (first_run)
    {

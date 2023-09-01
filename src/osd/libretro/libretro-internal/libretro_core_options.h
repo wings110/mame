@@ -598,7 +598,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       CORE_NAME "_autoloadfastforward",
       "Automatic Load Fast-Forward",
       NULL,
-      "Experimental feature to automatically fast-forward during CD access. Only works with 'lc89510' drive found in Sega CD and Neo Geo CD.",
+      "Experimental feature to automatically fast-forward during CD access.\nWorks with:\n- Generic SCSI\n- Sega CD and Neo Geo CD",
       NULL,
       "hacks",
       {
