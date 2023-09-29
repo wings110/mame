@@ -577,7 +577,7 @@ merit/meritm.cpp          // mostly gambling
 //merit/merits.cpp          // no screen
 //merit/meritsdx.cpp          // no screen
 merit/mgames.cpp          // poker
-//merit/mtouchxl.cpp          // chd, some mnw, some untested
+merit/mtouchxl.cpp          // chd, some mnw, some untested
 //merit/pubtimed.cpp          // no screen
 metro/hyprduel.cpp
 metro/metro.cpp
