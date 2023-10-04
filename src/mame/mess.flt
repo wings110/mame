@@ -198,13 +198,14 @@ ddr/sprachmg.cpp
 ddr/vcs80.cpp
 dec/dct11em.cpp
 dec/decmate2.cpp
-dec/decstation.cpp
 dec/dectalk.cpp
 dec/decwritr.cpp
+dec/dtc03.cpp
 dec/jensen.cpp
 dec/pdp1.cpp
 dec/pdp11.cpp
 dec/rainbow.cpp
+dec/sfb.cpp
 dec/vax11.cpp
 dec/vk100.cpp
 dec/vt100.cpp
@@ -277,9 +278,6 @@ fidelity/sc8.cpp
 fidelity/sc9.cpp
 fidelity/vcc.cpp
 fidelity/vsc.cpp
-force/fccpu20.cpp
-force/fccpu30.cpp
-force/force68k.cpp
 force/miniforce.cpp
 fujitsu/fm7.cpp
 fujitsu/fmtowns.cpp
@@ -333,7 +331,6 @@ hegenerglaser/montec.cpp
 hegenerglaser/polgar.cpp
 hegenerglaser/risc.cpp
 hegenerglaser/smondial.cpp
-heurikon/hk68v10.cpp
 hitachi/b16.cpp
 hitachi/bmjr.cpp
 hitachi/bml3.cpp
@@ -496,7 +493,6 @@ mits/altair.cpp
 mits/mits680b.cpp
 mitsubishi/multi16.cpp
 mitsubishi/multi8.cpp
-mizar/mzr8105.cpp
 morrow/microdec.cpp
 morrow/mpz80.cpp
 morrow/tricep.cpp
@@ -510,7 +506,6 @@ motorola/mekd2.cpp
 motorola/mekd3.cpp
 motorola/mekd4.cpp
 motorola/mekd5.cpp
-motorola/mvme147.cpp
 motorola/mvme162.cpp
 motorola/powerstack.cpp
 motorola/sys1121.cpp
